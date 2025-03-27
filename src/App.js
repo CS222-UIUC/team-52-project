@@ -3,6 +3,8 @@ import { Home, TopBar} from "./pages/Home"; // Import Home and TopBar from the p
 import Product from "./pages/Product"; // Import Product component
 import Cart from "./pages/Cart"; // Import Cart component
 import About from "./pages/About"; // Import About component
+import "./App.css"; //import global styles
+import Footer from "./components/Footer"; //import footer
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
         <Route path="/about" element={<About />} /> {/* About page */}
       </Routes>
       </div>
+      <Footer />  {/* Include Footer here */}
       </div>
     </Router>
   );
