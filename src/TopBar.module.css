@@ -9,3 +9,12 @@
     color: rgb(255, 0, 238) !important;
     font-size: 40px !important;
   }
+
+  .tab {
+    /* Existing styles */
+    margin-right: 20px; /* Add space between links */
+  }
+  
+  .tab:last-child {
+    margin-right: 0; /* Remove margin from the last tab */
+  }
