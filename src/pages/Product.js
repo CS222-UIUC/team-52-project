@@ -31,7 +31,7 @@ const Product = () => {
                   <h2>{x.Title}</h2>
                   <h3>${x.Price}</h3>
                   <div className ='product_graph'>
-                    <img src={x.graph} alt={x.Title}></img>
+                    <img src={`http://127.0.0.1:5000/generate-plot?product=${x.Title}`} alt={x.Title}></img>
                   </div>
                   <button>Add to Cart</button>
                 </div>
