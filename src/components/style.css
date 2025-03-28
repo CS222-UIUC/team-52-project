@@ -1,0 +1,130 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    box-sizing: border-box;
+
+}
+/* .img-box img {
+    max-width: 100%; 
+    height: auto;    
+    width: 200px;    
+    object-fit: cover; 
+} */
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding: 10px 30px;
+}
+
+.container .box {
+    width: 300px;
+    height: 400px;
+    overflow: hidden;
+    margin-top: 20px;
+    background: #e8e8e8;
+    padding: 10px 20px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.container .box .content {
+    align-items: center;
+    max-width: 100%;
+}
+
+.container .box .content .img-box img {
+    width: 260px;
+    height: 300px;
+}
+
+.container .box .content .detail .info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.container .box .content .detail .info h3 {
+    color: #a94040;
+    text-transform: capitalize;
+    font-weight: 200;
+}
+
+.container .box .content .detail button {
+    margin-top: 10px;
+    margin-left: 35%;
+    padding: 10px 30px;
+    border: none;
+    outline: none;
+    background: #38bd72;
+    color: #fff;
+    cursor: pointer;
+}
+
+.detail_container
+{
+    position: fixed;
+    z-index: 1;
+    align-items: center;
+    width: 900px;
+    background: #e8e8e8;
+    margin-left: 21%;
+    margin-bottom: 20%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border: 1px solid #e8e8e8;
+    padding: 20px 30px;
+    border-radius: 5px;
+
+}
+
+.detail_container .detail_content .detail_info .img-box img {
+    width: 250px;
+    height: 250px;
+}
+
+.detail_container .detail_content
+{
+    max-width: 100%;
+}
+
+.detail_container .detail_content .close {
+    border: none;
+    outline: none;
+    background-color: none;
+    cursor: pointer;
+}
+
+.detail_container .detail_content .detail_info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.detail_container .detail_content .detail_info .product_detail
+ {
+    margin-left: 30px;
+ }
+
+ .detail_container .detail_content .detail_info .product_detail h2 {
+    color: #0cdf3a;
+    text-transform: uppercase;
+    font-weight:  200;
+ }
+
+ .detail_container .detail_content .detail_info .product_detail .product_graph img {
+    width: 590px;
+ }
+
+ .detail_container .detail_content .detail_info .product_detail button {
+    margin-top: 10px;
+    padding: 10px 30px;
+    border: none;
+    outline: none;
+    background: #56ab93;
+    color: #fff;
+    cursor: pointer;
+ }
