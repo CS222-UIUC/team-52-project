@@ -7,7 +7,7 @@ console.log("TopBar CSS imported");
 
 
 
-//top bar component
+//top bar componentgit
 export function TopBar() {
     const [searchQuery, setSearchQuery] = useState(""); // State for storing the search input value
     const [activeTab, setActiveTab] = useState("Home"); // State for keeping track of the active tab
