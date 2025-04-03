@@ -5,6 +5,7 @@ import Cart from "./pages/Cart"; // Import Cart component
 import About from "./pages/About"; // Import About component
 import "./App.css"; //import global styles
 import Footer from "./components/Footer"; //import footer
+import 'bootstrap/dist/css/bootstrap.min.css' //bootstrap
 
 function App() {
   return (

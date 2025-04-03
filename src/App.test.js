@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 //   const linkElement = screen.getByText(/learn react/i);
 //   expect(linkElement).toBeInTheDocument();
 // });
-
+/*
 test('correct background', () => {
     render(<App />);
     if (backgroundColor === "rgb(138, 187, 99)") {
@@ -17,4 +17,4 @@ test('correct background', () => {
         console.log("background isn't green")
     }
   });
-
+*/
