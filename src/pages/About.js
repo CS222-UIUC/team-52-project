@@ -1,15 +1,9 @@
 import { useState } from "react";
-<<<<<<< HEAD
-import styles from './About.module.css';
-const About = () => {
-  // State for contact form
-=======
 import React from 'react';
 
 function About() {
 
   //  State for contact form
->>>>>>> b847cf93c8cdbe35edfcd85ec77df36ff6ea1f32
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
 
   // Handle input change
@@ -25,13 +19,6 @@ function About() {
     setFormData({ name: "", email: "", message: "" }); // Reset form
   };
 
-<<<<<<< HEAD
-  return (
-    <div className={styles.container}>
-      {/* Title */}
-      <h1 className={styles.title}>About Us</h1>
-=======
->>>>>>> b847cf93c8cdbe35edfcd85ec77df36ff6ea1f32
 
   return (
     <div>
@@ -60,13 +47,6 @@ function About() {
           Grocery Gauge helps shoppers track grocery price inflation and find the best deals across different stores. Our goal is to make budgeting easier by providing real-time price comparisons and historical trends.
           </p>
         </div>
-<<<<<<< HEAD
-      
-         {/*Possible group photo insert here, 
-         -
-         -
-         under mission statement*/}
-=======
       </section>
 
       <section className="section">
@@ -128,7 +108,6 @@ function About() {
             <p>Phone: +1-111-111-1111</p>
           </div>
         </div>
->>>>>>> b847cf93c8cdbe35edfcd85ec77df36ff6ea1f32
       </div>
     </div>
   </div>
