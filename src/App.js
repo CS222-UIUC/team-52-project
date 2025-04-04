@@ -5,7 +5,12 @@ import Cart from "./pages/Cart"; // Import Cart component
 import About from "./pages/About"; // Import About component
 import "./App.css"; //import global styles
 import Footer from "./components/Footer"; //import footer
+<<<<<<< HEAD
 import { useState } from "react";
+=======
+import 'bootstrap/dist/css/bootstrap.min.css' //bootstrap
+
+>>>>>>> b847cf93c8cdbe35edfcd85ec77df36ff6ea1f32
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
 
