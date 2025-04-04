@@ -124,7 +124,47 @@
     padding: 10px 30px;
     border: none;
     outline: none;
-    background: #56ab93;
+    background: #6eaa8a;
     color: #fff;
     cursor: pointer;
  }
+
+ p {
+    font-size: 14px;
+    color: #262626;
+ }
+
+ .section {
+    padding-top: 40px;
+    padding-bottom: 40px;
+ }
+
+ .main-heading {
+    color: rgb(124, 177, 120);
+    font-size: 26px;
+ }
+
+ .underline {
+    height: 04px;
+    width: 4rem;
+    background-color: #56ab93;
+    margin-top: 10px;
+    margin-bottom: 10px;
+ }
+
+ .bg-c-light {
+    background-color: #f2f2f2;
+ }
+
+ .footer a {
+    color: #ffffff;
+    text-decoration: none !important ;
+ }
+
+ .footer a:hover {
+    color: green;;
+ }
+
+ .custom-footer {
+    background-color: #87b175; /* Adjust to your preferred shade of green */
+}
