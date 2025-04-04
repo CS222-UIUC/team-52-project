@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import styles from './About.module.css';
 const About = () => {
   // State for contact form
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -18,9 +18,9 @@ const About = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col items-center p-8">
+    <div className={styles.container}>
       {/* Title */}
-      <h1 className="text-4xl font-bold mb-6">About Us</h1>
+      <h1 className={styles.title}>About Us</h1>
 
       {/* Main Content */}
       <div className="flex flex-col md:flex-row items-center max-w-5xl bg-white p-8 rounded-lg shadow-lg">
@@ -32,12 +32,11 @@ const About = () => {
             Our goal is to make budgeting easier by providing real-time price comparisons and historical trends.
           </p>
         </div>
-
-        {/* Right Side - Images */}
-        <div className="md:w-1/2 flex justify-center">
-          <img src="/images/grocery1.jpg" alt="Grocery Items" className="w-40 h-40 object-cover rounded-lg m-2" />
-          <img src="/images/grocery2.jpg" alt="Shopping Cart" className="w-40 h-40 object-cover rounded-lg m-2" />
-        </div>
+      
+         {/*Possible group photo insert here, 
+         -
+         -
+         under mission statement*/}
       </div>
 
       {/* Contact Form */}
