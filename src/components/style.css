@@ -24,10 +24,10 @@
 
 .container .box {
     width: 300px;
-    height: 400px;
+    height: 420px;
     overflow: hidden;
     margin-top: 20px;
-    background: #e8e8e8;
+    background: #c5eebd;
     padding: 10px 20px;
     margin-left: 20px;
     cursor: pointer;
@@ -121,7 +121,7 @@
 
  .detail_container .detail_content .detail_info .product_detail button {
     margin-top: 10px;
-    padding: 10px 30px;
+    padding: 10px 20px;
     border: none;
     outline: none;
     background: #6eaa8a;
@@ -166,5 +166,5 @@
  }
 
  .custom-footer {
-    background-color: #87b175; /* Adjust to your preferred shade of green */
+    background-color: #c8f3b6; /* Adjust to your preferred shade of green */
 }
