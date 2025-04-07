@@ -2,8 +2,21 @@ from celery import shared_task
 from django.conf import settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-
 from .models import PriceAlert
+from celery import shared_task
+from .utils import search_kroger_products
+
+@shared_task
+def fetch_kroger_data():
+
+    data = search_kroger_products("eggs")
+    print(f"Fetched data for eggs: {data}")
+    
+    data = search_kroger_products("milk")
+    print(f"Fetched data for milk: {data}")
+    
+    data = search_kroger_products("bread")
+    print(f"Fetched data for bread: {data}")
 
 @shared_task
 def check_price_alerts():

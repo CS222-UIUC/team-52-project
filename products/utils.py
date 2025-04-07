@@ -32,7 +32,7 @@ def search_kroger_products(keyword, location_id="01400943"):
     params = {
         "filter.term": keyword,
         "filter.locationId": location_id,
-        "limit": 2
+        "limit": 10
     }
     
     response = requests.get(url, headers=headers, params=params)

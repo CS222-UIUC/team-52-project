@@ -45,4 +45,4 @@ def search_product(access_token, search_term="milk", limit=2):
 if __name__ == "__main__":
     token = get_access_token()
     if token:
-        search_product(token, search_term="organic milk", limit=5)
+        search_product(token, search_term="milk", limit=10)
