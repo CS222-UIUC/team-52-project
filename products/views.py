@@ -8,11 +8,17 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .utils import search_kroger_products
 from .models import Product, PriceHistory
-from .serializers import PriceHistorySerializer
+from .serializers import ProductSerializer, PriceHistorySerializer
 
 @api_view(["GET"])
 def search_products(request):
-    """Search products by keyword."""
+    
+    products = Product.objects.all()
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
     keyword = request.query_params.get("q")
     location_id = request.query_params.get("location_id")  # Optional for more specific results
     
@@ -24,6 +30,7 @@ def search_products(request):
         return Response(products)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
+    
     
 class PriceHistoryView(APIView):
     """
