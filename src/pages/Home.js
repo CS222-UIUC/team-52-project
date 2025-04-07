@@ -7,10 +7,11 @@ import { AiFillCloseCircle } from "react-icons/ai"; // Importing the close icon 
 console.log("TopBar CSS imported");
 
 //top bar component
-export function TopBar() {
-    const [searchQuery, setSearchQuery] = useState(""); // State for storing the search input value
-    const [activeTab, setActiveTab] = useState("Home"); // State for keeping track of the active tab
-  
+export function TopBar({ searchQuery, setSearchQuery }) {
+   // const [searchQuery, setSearchQuery] = useState(""); // State for storing the search input value
+   // const [activeTab, setActiveTab] = useState("Home"); // State for keeping track of the active tab
+   const [activeTab, setActiveTab] = useState("Home");
+
     // Handle search input change
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value); // Update search query when input changes
@@ -52,6 +53,15 @@ export function TopBar() {
                     onClick={() => handleTabClick("Products")}
                 >
                     Products
+                    
+                </Link>
+                {/* Link for Cart */}
+                <Link
+                    to="/cart"
+                    className={`${styles.tab} ${activeTab === "Cart" ? styles.activeTab : ""}`}
+                    onClick={() => handleTabClick("Cart")}
+                >
+                    Cart
                 </Link>
                 {/* Link for About Us */}
                 <Link
@@ -60,15 +70,6 @@ export function TopBar() {
                     onClick={() => handleTabClick("About Us")}
                 >
                     About Us
-                </Link>
-
-                {/* Link for Cart */}
-                <Link
-                    to="/cart"
-                    className={`${styles.tab} ${activeTab === "Cart" ? styles.activeTab : ""}`}
-                    onClick={() => handleTabClick("Cart")}
-                >
-                    Cart
                 </Link>
             </nav>
 
@@ -99,9 +100,10 @@ export function TopBar() {
     );
 }
 
-export const Home = () => {
-    // Select first 4 products as popular items
-    const popularProducts = Products.slice(0, 4);
+export const Home = ({ searchQuery,setSearchQuery}) => {
+    // Select #? of products as "popular" products
+    
+    //const popularProducts = Products.slice(0, 8);
     const [detail, setDetail] = useState([]);
     const [close, setClose] = useState(false);
 
@@ -109,6 +111,11 @@ export const Home = () => {
         setDetail([{...product}]);
         setClose(true);
     };
+    const popularProducts = Products
+    .slice(0, 8)
+    .filter(p => 
+        p.Title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
      // Inline styles for the new elements
     const homeStyles = {
         container: {
@@ -132,10 +139,10 @@ export const Home = () => {
 
     return (
         <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
+            //display: 'flex',
+            //flexDirection: 'column',
+            //alignItems: 'center',
+           // justifyContent: 'center',
             minHeight: '60vh',  // Adjust based on your needs
             textAlign: 'center',
             padding: '2rem',
@@ -175,6 +182,8 @@ export const Home = () => {
                     <input
                         type="text"
                         placeholder="Search for products"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         style={{
                             padding: '0.8rem 1.2rem',
                             borderRadius: '50px',
