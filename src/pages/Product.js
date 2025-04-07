@@ -6,11 +6,27 @@ import '../components/style.css';
 const Product = () => {
   const [detail, setDetail] = useState([]);
   const [close, setClose] = useState(false)
-  const detailPage = (Product) =>
-  {
-    setDetail([{...Product}])
-    setClose(true)
-  }
+  const [loadingGraph, setLoadingGraph] = useState(false); 
+
+  const detailPage = async (product) => {
+    setLoadingGraph(true);
+    try {
+      const res = await fetch(`http://localhost:5000/generate-plot?product_id=${product.id}`);
+      const data = await res.json();
+
+      if (data.image) {
+        const imageUrl = `data:image/png;base64,${data.image}`;
+        setDetail([{ ...product, graph: imageUrl }]); // add base64 image to product
+      } else {
+        setDetail([{ ...product, graph: null }]); // no graph found
+      }
+    } catch (err) {
+      console.error("Error fetching price graph:", err);
+      setDetail([{ ...product, graph: null }]);
+    }
+    setClose(true);
+    setLoadingGraph(false);
+  };
   return (
     <>
       {
@@ -31,7 +47,13 @@ const Product = () => {
                   <h2>{x.Title}</h2>
                   <h3>${x.Price}</h3>
                   <div className ='product_graph'>
-                    <img src={`http://127.0.0.1:5000/generate-plot?product=${x.Title}`} alt={x.Title}></img>
+                    {loadingGraph ? (
+                        <p>Loading price graph...</p>
+                      ) : x.graph ? (
+                        <img src={x.graph} alt={`${x.Title} Price Graph`} />
+                      ) : (
+                        <p>No price graph available.</p>
+                      )}
                   </div>
                   <button>Add to Cart</button>
                 </div>
