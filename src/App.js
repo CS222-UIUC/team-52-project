@@ -6,7 +6,6 @@ import About from "./pages/About"; // Import About component
 import "./App.css"; //import global styles
 import Footer from "./components/Footer"; //import footer
 import 'bootstrap/dist/css/bootstrap.min.css' //bootstrap
-//import "useState" //import useState
 import React, { useState } from 'react';
 
 function App() {
