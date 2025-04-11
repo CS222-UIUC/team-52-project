@@ -1,5 +1,5 @@
 "use client";
-import { Link } from "react-router-dom"; 
+import { Link,  useLocation } from "react-router-dom"; 
 import React, { useState } from "react"; 
 import styles from "./TopBar.module.css";
 import Products from "../components/Products"; // Importing the Products component
@@ -10,7 +10,18 @@ console.log("TopBar CSS imported");
 export function TopBar({ searchQuery, setSearchQuery }) {
    // const [searchQuery, setSearchQuery] = useState(""); // State for storing the search input value
    // const [activeTab, setActiveTab] = useState("Home"); // State for keeping track of the active tab
-   const [activeTab, setActiveTab] = useState("Home");
+    const [activeTab, setActiveTab] = useState("Home");
+
+    const location = useLocation(); //izzie added
+    const path = location.pathname; //izzie added
+
+    const getActiveTab = () => {
+    if (path === "/") return "Home";
+    if (path === "/browse") return "Products";
+    if (path === "/cart") return "Cart";
+    if (path === "/about") return "About Us";
+    return "";
+    }; // izzie added
 
     // Handle search input change
     const handleSearchChange = (e) => {
@@ -41,7 +52,8 @@ export function TopBar({ searchQuery, setSearchQuery }) {
             <nav className={styles.navigation}>
                 <Link
                     to="/"
-                    className={`${styles.tab} ${activeTab === "Home" ? styles.activeTab : ""}`}
+                    className={`${styles.tab} ${getActiveTab() === "Home" ? styles.activeTab : ""}`} //changed to function call so that it works with footer
+
                     onClick={() => handleTabClick("Home")}
                 >
                     Home
@@ -49,7 +61,7 @@ export function TopBar({ searchQuery, setSearchQuery }) {
                 {/* Link for Products */}
                 <Link
                     to="/browse"
-                    className={`${styles.tab} ${activeTab === "Products" ? styles.activeTab : ""}`}
+                    className={`${styles.tab} ${getActiveTab() === "Products" ? styles.activeTab : ""}`}
                     onClick={() => handleTabClick("Products")}
                 >
                     Products
@@ -58,7 +70,7 @@ export function TopBar({ searchQuery, setSearchQuery }) {
                 {/* Link for Cart */}
                 <Link
                     to="/cart"
-                    className={`${styles.tab} ${activeTab === "Cart" ? styles.activeTab : ""}`}
+                    className={`${styles.tab} ${getActiveTab() === "Cart" ? styles.activeTab : ""}`}
                     onClick={() => handleTabClick("Cart")}
                 >
                     Cart
@@ -66,7 +78,7 @@ export function TopBar({ searchQuery, setSearchQuery }) {
                 {/* Link for About Us */}
                 <Link
                     to="/about"
-                    className={`${styles.tab} ${activeTab === "About Us" ? styles.activeTab : ""}`}
+                    className={`${styles.tab} ${getActiveTab() === "About Us" ? styles.activeTab : ""}`}
                     onClick={() => handleTabClick("About Us")}
                 >
                     About Us
@@ -205,7 +217,9 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
                         fontSize: '1rem',
                         transition: 'all 0.3s ease'
                     }}>
+                        <Link to="/browse" style={{ color: 'white', textDecoration: 'none' }}>
                         Explore Products
+                        </Link>
                     </button>
                 </div>
             </div>
