@@ -107,9 +107,25 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
     const [detail, setDetail] = useState([]);
     const [close, setClose] = useState(false);
 
-    const detailPage = (product) => {
-        setDetail([{...product}]);
-        setClose(true);
+    const detailPage = async (product) => {
+        // setDetail([{...product}]);
+        // setClose(true);
+        try {
+            const res = await fetch(`http://localhost:5000/generate-plot?product_id=${product.id}`);
+            const data = await res.json();
+        
+            if (data.image) {
+              // Add base64 graph to product
+              setDetail([{ ...product, graph: `data:image/png;base64,${data.image}` }]);
+            } else {
+              // No image returned
+              setDetail([{ ...product, graph: null }]);
+            }
+          } catch (error) {
+            console.error("Failed to fetch price graph:", error);
+            setDetail([{ ...product, graph: null }]);
+          }
+          setClose(true);
     };
     const popularProducts = Products
     .slice(0, 8)
@@ -307,11 +323,15 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
                                     }}>
                                         ${item.Price}
                                     </p>
-                                    <img 
-                                        src={item.graph} 
-                                        alt="Price trend" 
-                                        style={{ marginTop: '15px', maxWidth: '100%' }}
-                                    />
+                                    {item.graph ? (
+                                        <img 
+                                            src={item.graph} 
+                                            alt="Price trend" 
+                                            style={{ marginTop: '15px', maxWidth: '100%' }}
+                                        />
+                                    ) : (
+                                        <p style={{ marginTop: '15px', color: '#999' }}>No price graph available.</p>
+                                    )}
                                 </div>
                             </div>
                         ))}
