@@ -1,64 +1,120 @@
-// Cart.js
-import React, { useState } from 'react';
-import Products from '../components/Products';
+// src/pages/Cart.js
+import React, { useContext, useState, useEffect  } from 'react';
+import { CartContext } from '../components/CartContext';
+import styles from './Cart.module.css';
+
+
 function Cart() {
-  const [cartItems, setCartItems] = useState([]);
-  
-  // Function to add an item to the cart
-  const addToCart = (product) => {
-    setCartItems([...cartItems, product]);
+  const { cartItems, removeFromCart,updateQuantity } = useContext(CartContext);
+ 
+  const [quantityInputs, setQuantityInputs] = useState({});
+ 
+  // When cartItems change, initialize or update our quantityInputs
+  useEffect(() => {
+    const newInputs = {};
+    cartItems.forEach((item) => {
+      newInputs[item.id] = item.quantity.toString();
+    });
+    setQuantityInputs(newInputs);
+  }, [cartItems]);
+
+
+  // Multiply each product's price by its quantity
+  const totalPrice = cartItems.reduce((total, product) =>
+    total + product.Price * (product.quantity || 1), 0
+  );
+
+
+  //update quantity both locally and in the global context
+  const handleQuantityUpdate = (productId, value) => {
+    let newVal = value;
+    if (!newVal || parseInt(newVal, 10) < 1) {
+      newVal = "1";
+    }
+    setQuantityInputs({
+      ...quantityInputs,
+      [productId]: newVal,
+    });
+    updateQuantity(productId, parseInt(newVal, 10));
   };
 
-  // Function to remove an item from the cart
-  const removeFromCart = (productId) => {
-    setCartItems(cartItems.filter((item) => item.id !== productId));
-  };
-
-  const totalPrice = cartItems.reduce((total, product) => total + product.Price, 0);
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Your Cart</h1>
+    <div className={styles.cartContainer}>
+      <h1 className={styles.cartHeading}>Your Cart</h1>
       {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <p className={styles.emptyMessage}>Your cart is empty.</p>
       ) : (
-        <div>
-          {cartItems.map((product) => (
-            <div key={product.id} style={{ display: 'flex', marginBottom: '15px' }}>
-              <img src={product.img} alt={product.Title} style={{ width: '80px', height: '80px', objectFit: 'cover' }} />
-              <div style={{ marginLeft: '15px' }}>
-                <h3>{product.Title}</h3>
-                <p>${product.Price}</p>
-                <button onClick={() => removeFromCart(product.id)}>Remove from Cart</button>
+        <div className={styles.cartItems}>
+          {cartItems.map((product) => {
+            const inputValue =
+              quantityInputs[product.id] !== undefined
+                ? quantityInputs[product.id]
+                : product.quantity.toString();
+
+
+            return (
+              <div key={product.id} className={styles.cartItem}>
+                <img
+                  src={product.img}
+                  alt={product.Title}
+                  className={styles.itemImage}
+                />
+                <div className={styles.itemInfo}>
+                  <h3 className={styles.itemTitle}>{product.Title}</h3>
+                  <div className={styles.quantityContainer}>
+                    <label htmlFor={`quantity-${product.id}`}>
+                      Quantity:&nbsp;
+                    </label>
+                    <input
+                      id={`quantity-${product.id}`}
+                      type="number"
+                      min="1"
+                      value={inputValue}
+                      onChange={(e) =>
+                        setQuantityInputs({
+                          ...quantityInputs,
+                          [product.id]: e.target.value,
+                        })
+                      }
+                      onBlur={(e) =>
+                        handleQuantityUpdate(product.id, e.target.value)
+                      }
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleQuantityUpdate(product.id, e.target.value);
+                          // Remove focus so that onBlur is also triggered (if needed)
+                          e.target.blur();
+                        }
+                      }}
+                      className={styles.quantityInput}
+                    />
+                  </div>
+                  <p className={styles.itemPrice}>
+                    ${product.Price} x {product.quantity}
+                  </p>
+                  <p className={styles.itemSubtotal}>
+                    Subtotal: ${(product.Price * product.quantity).toFixed(2)}
+                  </p>
+                  <button
+                    className={styles.removeButton}
+                    onClick={() => removeFromCart(product.id)}
+                  >
+                    Remove from Cart
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-          <div>
-            <h3>Total: ${totalPrice}</h3>
-            <button>Proceed to Checkout</button>
+            );
+          })}
+          <div className={styles.cartTotal}>
+            <h3>Total: ${totalPrice.toFixed(2)}</h3>
+            <button className={styles.checkoutButton}>
+              Proceed to Checkout
+            </button>
           </div>
         </div>
       )}
-      <div className="container">
-        {Products.map((product) => (
-          <div className="box" key={product.id}>
-            <div className="content">
-              <div className="img-box">
-                <img src={product.img} alt={product.Title} />
-              </div>
-              <div className="detail">
-                <div className="info">
-                  <h3>{product.Title}</h3>
-                  <p>${product.Price}</p>
-                </div>
-                <button onClick={() => addToCart(product)}>Add to Cart</button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
-
 export default Cart;
