@@ -42,10 +42,10 @@ function About() {
           <div>
           <h5 className = "main-heading">Our Mission</h5>
           <div className = 'underline'></div>
-          </div>
           <p>
           Grocery Gauge helps shoppers track grocery price inflation and find the best deals across different stores. Our goal is to make budgeting easier by providing real-time price comparisons and historical trends.
           </p>
+          </div>
         </div>
       </section>
 

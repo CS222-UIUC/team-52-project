@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 
 function Footer() {
     return (
-      <section className="footer custom-footer text-white py-4">
+      <section className="footer custom-footer text-black py-4">
         <div className="container-fluid">
           <div className="row d-flex justify-content-center text-center">
             <div className="col-12 col-md-4">
               <h6>Information</h6>
               <hr />
-              <p className="text-white">
+              <p className="text-black">
                 Grocery-Gauge Grocery-Gauge Grocery-Gauge Grocery-Gauge Grocery-Gauge Grocery-Gauge Grocery-Gauge
               </p>
             </div>
@@ -26,8 +26,8 @@ function Footer() {
             <div className="col-12 col-md-4">
               <h6>Contact Us</h6>
               <hr />
-              <p className="text-white mb-1">grocery-gauge@email.com</p>
-              <p className="text-white mb-1">+1-111-111-1111</p>
+              <p className="text-black mb-1">grocery-gauge@email.com</p>
+              <p className="text-black mb-1">+1-111-111-1111</p>
             </div>
           </div>
         </div>
