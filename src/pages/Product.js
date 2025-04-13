@@ -1,18 +1,29 @@
-import React, { useState } from 'react';
+//this is product.js file
+import React, { useState, useContext} from 'react';
 import Products from '../components/Products';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import '../components/style.css';
+import { CartContext } from '../components/CartContext';
+
 
 const Product = () => {
   const [detail, setDetail] = useState([]);
   const [close, setClose] = useState(false)
-  const [loadingGraph, setLoadingGraph] = useState(false); 
+  const [loadingGraph, setLoadingGraph] = useState(false);
+
+
+  //string for quanity
+  const [quantity, setQuantity] = useState("1");
+  // Get addToCart from the global CartContext
+  const { addToCart } = useContext(CartContext);
+
 
   const detailPage = async (product) => {
     setLoadingGraph(true);
     try {
       const res = await fetch(`http://localhost:5000/generate-plot?product_id=${product.id}`);
       const data = await res.json();
+
 
       if (data.image) {
         const imageUrl = `data:image/png;base64,${data.image}`;
@@ -26,71 +37,99 @@ const Product = () => {
     }
     setClose(true);
     setLoadingGraph(false);
+    setQuantity("1"); // Reset quantity when opening detail page
   };
+
+
+
+
   return (
     <>
-      {
-        close ?
-        <div className = 'detail_container'>
-      <div className= 'detail_content'>
-         <button className = 'close' onClick={() => setClose(false)}><AiFillCloseCircle /></button>
-        {
-          detail.map((x) =>
-          {
-            return(
-              <>
-              <div className = 'detail_info'>
-                <div className = 'img-box'>
-                  <img src = {x.img} alt = {x.Title}></img>
+      {close && (
+        <div className="detail_container">
+          <div className="detail_content">
+            <button className="close" onClick={() => setClose(false)}>
+              <AiFillCloseCircle />
+            </button>
+            {detail.map((x) => (
+              <div key={x.id} className="detail_info">
+                <div className="img-box">
+                  <img src={x.img} alt={x.Title} />
                 </div>
-                <div className= 'product_detail'>
+                <div className="product_detail">
                   <h2>{x.Title}</h2>
                   <h3>${x.Price}</h3>
-                  <div className ='product_graph'>
+                  <div className="product_graph">
                     {loadingGraph ? (
-                        <p>Loading price graph...</p>
-                      ) : x.graph ? (
-                        <img src={x.graph} alt={`${x.Title} Price Graph`} />
-                      ) : (
-                        <p>No price graph available.</p>
-                      )}
+                      <p>Loading price graph...</p>
+                    ) : x.graph ? (
+                      <img src={x.graph} alt={`${x.Title} Price Graph`} />
+                    ) : (
+                      <p>No price graph available.</p>
+                    )}
                   </div>
-                  <button>Add to Cart</button>
+                  {/* Quantity input */}
+                  <div style={{ marginTop: '10px' }}>
+                    <label htmlFor="quantityInput" style={{ marginRight: '8px' }}>
+                      Quantity:
+                    </label>
+                    <input
+                      id="quantityInput"
+                      type="number"
+                      min="1"
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                      onBlur={() => {
+                        // If the user clears the input or enters a number below 1, reset to "1"
+                        if (!quantity || parseInt(quantity, 10) < 1) {
+                          setQuantity("1");
+                        }
+                      }}
+                      style={{ width: '60px' }}
+                    />
+                  </div>
+                  {/* "Add to Cart" button */}
+                  <button
+                    onClick={() => {
+                      // Convert quantity to a number (default to 1 if NaN)
+                      addToCart(x, parseInt(quantity, 10) || 1);
+                      setClose(false); // Optionally close the modal after adding
+                    }}
+                    style={{ marginTop: '15px' }}
+                  >
+                    Add to Cart
+                  </button>
                 </div>
               </div>
-              </>
-            )
-          } )
-        }
-      </div>
-    </div> : null
-      }
-      <div className='container'>
+            ))}
+          </div>
+        </div>
+      )}
 
-        {
-          Products.map((curElm) => { // Corrected arrow function syntax
-            return (
-              <div className='box' key={curElm.id}> {/* Added a unique key */}
-                <div className='content'>
-                  <div className='img-box'>
-                    <img src={curElm.img} alt={curElm.Title}></img>
-                  </div>
-                  <div className='detail'>
-                    <div className='info'>
-                      <h3>{curElm.Title}</h3>
-                      <p>${curElm.Price}</p>
-                    </div>
-                    <button onClick={() => detailPage (curElm) }> View</button>
-                  </div>
-                </div>
+
+      <div className="container">
+        {Products.map((curElm) => (
+          <div className="box" key={curElm.id}>
+            <div className="content">
+              <div className="img-box">
+                <img src={curElm.img} alt={curElm.Title} />
               </div>
-            );
-          })
-        }
+              <div className="detail">
+                <div className="info">
+                  <h3>{curElm.Title}</h3>
+                  <p>${curElm.Price}</p>
+                </div>
+                <button onClick={() => detailPage(curElm)}>View</button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </>
   );
 };
 
-export default Product;
 
+
+
+export default Product;
