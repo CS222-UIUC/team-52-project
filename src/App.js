@@ -1,3 +1,4 @@
+//this is app.js file
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Home, TopBar} from "./pages/Home"; // Import Home and TopBar from the pages folder
 import Product from "./pages/Product"; // Import Product component
@@ -7,11 +8,13 @@ import "./App.css"; //import global styles
 import Footer from "./components/Footer"; //import footer
 import 'bootstrap/dist/css/bootstrap.min.css' //bootstrap
 import React, { useState } from 'react';
+import { CartProvider } from './components/CartContext';
 
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
+    <CartProvider>
     <Router>
       <div className="main-content">
         <TopBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
@@ -26,6 +29,7 @@ function App() {
         <Footer />
       </div>
     </Router>
+    </CartProvider>
   );
 }
 export default App;

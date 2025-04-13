@@ -1,3 +1,4 @@
+//this is home.js page
 "use client";
 import { Link,  useLocation } from "react-router-dom"; 
 import React, { useState } from "react"; 
