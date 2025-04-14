@@ -1,20 +1,38 @@
-const Footer = () => {
+import React from "react";
+import { Link } from "react-router-dom"; 
+
+function Footer() {
     return (
-      <footer className="bg-gray-800 text-white py-6 mt-12">
-        <div className="container mx-auto text-center">
-          {/* Links to Terms and Conditions & Privacy Policy */}
-          <div className="mb-4">
-            <a href="/terms" className="text-gray-400 hover:text-white mx-4">Terms and Conditions</a> {/* Added margin-right */}
-            <a href="/privacy" className="text-gray-400 hover:text-white mx-4">Privacy Policy</a> {/* Added margin-left */}
-          </div>
-  
-          {/* Contact Us */}
-          <div>
-            <p className="text-gray-400">Contact us: <a href="mailto:contact@grocerygauge.com" className="text-white hover:text-blue-400">contact@grocerygauge.com</a></p>
+      <section className="footer custom-footer text-black py-4">
+        <div className="container-fluid">
+          <div className="row d-flex justify-content-center text-center">
+            <div className="col-12 col-md-4">
+              <h6>Information</h6>
+              <hr />
+              <p className="text-black">
+                Grocery-Gauge Grocery-Gauge Grocery-Gauge Grocery-Gauge Grocery-Gauge Grocery-Gauge Grocery-Gauge
+              </p>
+            </div>
+            <div className="col-12 col-md-4">
+              <h6>Quick Links</h6>
+              <hr />
+              <ul className="list-unstyled">
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/about">About</Link></li>
+                <li><Link to="/cart">Cart</Link></li>
+                <li><Link to="/browse">Products</Link></li>
+              </ul>
+            </div>
+            <div className="col-12 col-md-4">
+              <h6>Contact Us</h6>
+              <hr />
+              <p className="text-black mb-1">grocery-gauge@email.com</p>
+              <p className="text-black mb-1">+1-111-111-1111</p>
+            </div>
           </div>
         </div>
-      </footer>
+      </section>
     );
-  };
-  
-  export default Footer;
+}
+
+export default Footer;

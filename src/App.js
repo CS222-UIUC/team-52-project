@@ -5,28 +5,30 @@ import Cart from "./pages/Cart"; // Import Cart component
 import About from "./pages/About"; // Import About component
 import "./App.css"; //import global styles
 import Footer from "./components/Footer"; //import footer
+import 'bootstrap/dist/css/bootstrap.min.css' //bootstrap
+import React, { useState } from 'react';
+import { CartProvider } from './components/CartContext';
 
 function App() {
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
+    <CartProvider>
     <Router>
-       {/* Main content wrapper */}
-       <div className="main-content">
-      {/* Render TopBar at the top of the page */}
-      <TopBar />
-         {/* Content section where the different pages will render */}
-         <div className="content-wrapper">
-      {/* Define the routes for different pages */}
-      <Routes>
-        <Route path="/" element={<Home />} /> {/* Home page */}
-        <Route path="/browse" element={<Product />} /> {/* Product page */}
-        <Route path="/cart" element={<Cart />} /> {/* Cart page */}
-        <Route path="/about" element={<About />} /> {/* About page */}
-      </Routes>
-      </div>
-      <Footer />  {/* Include Footer here */}
+      <div className="main-content">
+        <TopBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <div className="content-wrapper">
+          <Routes>
+          <Route path="/" element={<Home searchQuery={searchQuery} setSearchQuery={setSearchQuery} />} />
+            <Route path="/browse" element={<Product />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </div>
+        <Footer />
       </div>
     </Router>
+    </CartProvider>
   );
 }
-
 export default App;
