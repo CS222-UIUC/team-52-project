@@ -6,6 +6,7 @@ import logging
 from django.conf import settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+from django.utils import timezone
 #for testing sendgrid email
 
 KROGER_CLIENT_ID = "grocerygauge-243261243034242f6863354a64535762396c68434f74357059664b714f58515633327a2f4a734c657243516864345865724a79396462476c444676759164103456257333400"
@@ -61,6 +62,10 @@ def search_kroger_products(keyword, location_id="01400943"):
                 "current_price": current_price
             }
         )
+        
+        # product.last_updated = timezone.now()
+        # product.save(update_fields=["last_updated"])
+        
         # Optionally, you can add a separate model for PriceHistory here
         PriceHistory.objects.create(product=product, price=current_price)
 
