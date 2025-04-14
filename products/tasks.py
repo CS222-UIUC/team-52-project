@@ -2,21 +2,19 @@ from celery import shared_task
 from django.conf import settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from .models import PriceAlert
+from .models import PriceAlert, Product
 from celery import shared_task
 from .utils import search_kroger_products
+from django.utils import timezone
 
 @shared_task
 def fetch_kroger_data():
 
-    data = search_kroger_products("eggs")
-    print(f"Fetched data for eggs: {data}")
-    
-    data = search_kroger_products("milk")
-    print(f"Fetched data for milk: {data}")
-    
-    data = search_kroger_products("bread")
-    print(f"Fetched data for bread: {data}")
+    keywords = ["bread", "eggs", "fruit", "dairy", "meat", "veggies", "oil", "sriracha", "cereal"]
+    for keyword in keywords:
+        search_kroger_products(keyword)
+        
+    Product.objects.all().update(last_updated=timezone.now())
 
 @shared_task
 def check_price_alerts():
