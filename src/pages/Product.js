@@ -17,6 +17,20 @@ const Product = () => {
   // Get addToCart from the global CartContext
   const { addToCart } = useContext(CartContext);
 
+  ////////////////////////////////////////////////////
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 12;
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = Products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const totalPages = Math.ceil(Products.length / productsPerPage);
+
+
+  ///////////////////////////////////////////////////
+
 
   const detailPage = async (product) => {
     setLoadingGraph(true);
@@ -108,7 +122,7 @@ const Product = () => {
 
 
       <div className="container">
-        {Products.map((curElm) => (
+        {currentProducts.map((curElm) => (
           <div className="box" key={curElm.id}>
             <div className="content">
               <div className="img-box">
@@ -125,6 +139,61 @@ const Product = () => {
           </div>
         ))}
       </div>
+
+      <div className="multipage" style={{ marginTop: '20px', textAlign: 'center' }}>
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          style={{
+            margin: '0 6px',
+            padding: '6px 12px',
+            borderRadius: '5px',
+            backgroundColor: '#eee',
+            border: 'none',
+            cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+            opacity: currentPage === 1 ? 0.5 : 1
+          }}
+        >
+          Previous
+        </button>
+
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrentPage(i + 1)}
+            className={currentPage === i + 1 ? "active" : ""}
+            style={{
+              margin: '0 4px',
+              padding: '6px 12px',
+              borderRadius: '5px',
+              backgroundColor: currentPage === i + 1 ? '#8abb63' : '#eee',
+              color: currentPage === i + 1 ? '#fff' : '#000',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            {i + 1}
+          </button>
+        ))}
+
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          style={{
+            margin: '0 6px',
+            padding: '6px 12px',
+            borderRadius: '5px',
+            backgroundColor: '#eee',
+            border: 'none',
+            cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+            opacity: currentPage === totalPages ? 0.5 : 1
+          }}
+        >
+          Next
+        </button>
+      </div>
+
+
     </>
   );
 };
