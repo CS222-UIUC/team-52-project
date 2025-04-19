@@ -18,9 +18,9 @@ function Footer() {
               <hr />
               <ul className="list-unstyled">
                 <li><Link to="/">Home</Link></li>
-                <li><Link to="/about">About</Link></li>
-                <li><Link to="/cart">Cart</Link></li>
                 <li><Link to="/browse">Products</Link></li>
+                <li><Link to="/cart">Cart</Link></li>
+                <li><Link to="/about">About</Link></li>
               </ul>
             </div>
             <div className="col-12 col-md-4">

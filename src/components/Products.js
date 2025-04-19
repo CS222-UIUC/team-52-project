@@ -107,6 +107,123 @@ const Products = [
         graph : '/images/basic-line-chart.svg'
 
     },
+    {
+        id: 13,
+        Title: 'product 13',
+        img: '/images/neha-deshmukh-GoKXJaQoLQs-unsplash.jpg',
+        Price:  10,
+        cat: 'fruit',
+        graph : '/images/basic-line-chart.svg'
+
+    },
+    {
+        id: 14,
+        Title: 'product 14',
+        img: '/images/rodrigo-dos-reis-h3AkzboxK4Q-unsplash.jpg',
+        Price:  10,
+        cat: 'fruit',
+        graph : '/images/basic-line-chart.svg'
+
+    },
+    {
+        id: 15,
+        Title: 'product 15',
+        img: '/images/tangerine-newt-a9rxefN9vgY-unsplash.jpg',
+        Price:  10,
+        cat: 'fruit',
+        graph : '/images/basic-line-chart.svg'
+
+    },
+    {
+        id: 16,
+        Title: 'product 16',
+        img: '/images/vino-li-pCjw_ygKCv0-unsplash.jpg',
+        Price:  10,
+        cat: 'fruit',
+        graph : '/images/basic-line-chart.svg'
+
+    },
+    {
+        id: 17,
+        Title: 'product 17',
+        img: '/images/zaib-tse-KVv5lFOMY1E-unsplash.jpg',
+        Price:  10,
+        cat: 'fruit',
+        graph : '/images/basic-line-chart.svg'
+
+    },
+    {
+        id: 18,
+        Title: 'product 17',
+        img: '/images/zaib-tse-KVv5lFOMY1E-unsplash.jpg',
+        Price:  10,
+        cat: 'fruit',
+        graph : '/images/basic-line-chart.svg'
+
+    },
+    {
+        id: 19,
+        Title: 'product 17',
+        img: '/images/zaib-tse-KVv5lFOMY1E-unsplash.jpg',
+        Price:  10,
+        cat: 'fruit',
+        graph : '/images/basic-line-chart.svg'
+
+    },
+    {
+        id: 20,
+        Title: 'product 17',
+        img: '/images/zaib-tse-KVv5lFOMY1E-unsplash.jpg',
+        Price:  10,
+        cat: 'fruit',
+        graph : '/images/basic-line-chart.svg'
+
+    },
+    {
+        id: 21,
+        Title: 'product 17',
+        img: '/images/zaib-tse-KVv5lFOMY1E-unsplash.jpg',
+        Price:  10,
+        cat: 'fruit',
+        graph : '/images/basic-line-chart.svg'
+
+    },
+    {
+        id: 22,
+        Title: 'product 17',
+        img: '/images/zaib-tse-KVv5lFOMY1E-unsplash.jpg',
+        Price:  10,
+        cat: 'fruit',
+        graph : '/images/basic-line-chart.svg'
+
+    },
+    {
+        id: 23,
+        Title: 'product 17',
+        img: '/images/zaib-tse-KVv5lFOMY1E-unsplash.jpg',
+        Price:  10,
+        cat: 'fruit',
+        graph : '/images/basic-line-chart.svg'
+
+    },
+    {
+        id: 24,
+        Title: 'product 17',
+        img: '/images/zaib-tse-KVv5lFOMY1E-unsplash.jpg',
+        Price:  10,
+        cat: 'fruit',
+        graph : '/images/basic-line-chart.svg'
+
+    },
+    {
+        id: 25,
+        Title: 'product 17',
+        img: '/images/zaib-tse-KVv5lFOMY1E-unsplash.jpg',
+        Price:  1000000,
+        cat: 'fruit',
+        graph : '/images/basic-line-chart.svg'
+
+    },
     
 ]
 

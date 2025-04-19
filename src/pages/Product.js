@@ -17,29 +17,42 @@ const Product = () => {
   // Get addToCart from the global CartContext
   const { addToCart } = useContext(CartContext);
 
+  ////////////////////////////////////////////////////
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 12;
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = Products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const totalPages = Math.ceil(Products.length / productsPerPage);
+
+
+  ///////////////////////////////////////////////////
+
 
   const detailPage = async (product) => {
+    // optimized to counter slow runtimes
+    setDetail([{ ...product, graph: null }]);
+    setClose(true);
+    setQuantity("1"); // Reset quantity
+  
     setLoadingGraph(true);
     try {
       const res = await fetch(`http://localhost:5000/generate-plot?product_id=${product.id}`);
       const data = await res.json();
-
-
+  
       if (data.image) {
         const imageUrl = `data:image/png;base64,${data.image}`;
-        setDetail([{ ...product, graph: imageUrl }]); // add base64 image to product
-      } else {
-        setDetail([{ ...product, graph: null }]); // no graph found
+        setDetail([{ ...product, graph: imageUrl }]);
       }
     } catch (err) {
       console.error("Error fetching price graph:", err);
-      setDetail([{ ...product, graph: null }]);
+    } finally {
+      setLoadingGraph(false);
     }
-    setClose(true);
-    setLoadingGraph(false);
-    setQuantity("1"); // Reset quantity when opening detail page
   };
-
 
 
 
@@ -108,7 +121,7 @@ const Product = () => {
 
 
       <div className="container">
-        {Products.map((curElm) => (
+        {currentProducts.map((curElm) => (
           <div className="box" key={curElm.id}>
             <div className="content">
               <div className="img-box">
@@ -125,6 +138,61 @@ const Product = () => {
           </div>
         ))}
       </div>
+
+      <div className="multipage" style={{ marginTop: '20px', textAlign: 'center' }}>
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          style={{
+            margin: '0 6px',
+            padding: '6px 12px',
+            borderRadius: '5px',
+            backgroundColor: '#eee',
+            border: 'none',
+            cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+            opacity: currentPage === 1 ? 0.5 : 1
+          }}
+        >
+          Previous
+        </button>
+
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrentPage(i + 1)}
+            className={currentPage === i + 1 ? "active" : ""}
+            style={{
+              margin: '0 4px',
+              padding: '6px 12px',
+              borderRadius: '5px',
+              backgroundColor: currentPage === i + 1 ? '#8abb63' : '#eee',
+              color: currentPage === i + 1 ? '#fff' : '#000',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            {i + 1}
+          </button>
+        ))}
+
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          style={{
+            margin: '0 6px',
+            padding: '6px 12px',
+            borderRadius: '5px',
+            backgroundColor: '#eee',
+            border: 'none',
+            cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+            opacity: currentPage === totalPages ? 0.5 : 1
+          }}
+        >
+          Next
+        </button>
+      </div>
+
+
     </>
   );
 };
