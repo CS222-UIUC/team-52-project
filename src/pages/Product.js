@@ -33,27 +33,26 @@ const Product = () => {
 
 
   const detailPage = async (product) => {
+    // optimized to counter slow runtimes
+    setDetail([{ ...product, graph: null }]);
+    setClose(true);
+    setQuantity("1"); // Reset quantity
+  
     setLoadingGraph(true);
     try {
       const res = await fetch(`http://localhost:5000/generate-plot?product_id=${product.id}`);
       const data = await res.json();
-
-
+  
       if (data.image) {
         const imageUrl = `data:image/png;base64,${data.image}`;
-        setDetail([{ ...product, graph: imageUrl }]); // add base64 image to product
-      } else {
-        setDetail([{ ...product, graph: null }]); // no graph found
+        setDetail([{ ...product, graph: imageUrl }]);
       }
     } catch (err) {
       console.error("Error fetching price graph:", err);
-      setDetail([{ ...product, graph: null }]);
+    } finally {
+      setLoadingGraph(false);
     }
-    setClose(true);
-    setLoadingGraph(false);
-    setQuantity("1"); // Reset quantity when opening detail page
   };
-
 
 
 
