@@ -10,7 +10,6 @@ console.log("TopBar CSS imported");
 export function TopBar({ searchQuery, setSearchQuery }) {
    // const [searchQuery, setSearchQuery] = useState(""); // State for storing the search input value
    // const [activeTab, setActiveTab] = useState("Home"); // State for keeping track of the active tab
-    const [activeTab, setActiveTab] = useState("Home");
 
     const location = useLocation(); //izzie added
     const path = location.pathname; //izzie added
@@ -35,9 +34,9 @@ export function TopBar({ searchQuery, setSearchQuery }) {
     };
   
     // Handle tab click (to set active tab)
-    const handleTabClick = (tabName) => {
-        setActiveTab(tabName); // Update activeTab state when a tab is clicked
-    };
+    // const handleTabClick = (tabName) => {
+    //     setActiveTab(tabName); // Update activeTab state when a tab is clicked
+    // };
   
     return (
         <header className={styles.topBar}>
@@ -54,7 +53,7 @@ export function TopBar({ searchQuery, setSearchQuery }) {
                     to="/"
                     className={`${styles.tab} ${getActiveTab() === "Home" ? styles.activeTab : ""}`} //changed to function call so that it works with footer
 
-                    onClick={() => handleTabClick("Home")}
+                    //onClick={() => handleTabClick("Home")}
                 >
                     Home
                 </Link>
@@ -62,7 +61,7 @@ export function TopBar({ searchQuery, setSearchQuery }) {
                 <Link
                     to="/browse"
                     className={`${styles.tab} ${getActiveTab() === "Products" ? styles.activeTab : ""}`}
-                    onClick={() => handleTabClick("Products")}
+                    //onClick={() => handleTabClick("Products")}
                 >
                     Products
                     
@@ -71,7 +70,7 @@ export function TopBar({ searchQuery, setSearchQuery }) {
                 <Link
                     to="/cart"
                     className={`${styles.tab} ${getActiveTab() === "Cart" ? styles.activeTab : ""}`}
-                    onClick={() => handleTabClick("Cart")}
+                    //onClick={() => handleTabClick("Cart")}
                 >
                     Cart
                 </Link>
@@ -79,7 +78,7 @@ export function TopBar({ searchQuery, setSearchQuery }) {
                 <Link
                     to="/about"
                     className={`${styles.tab} ${getActiveTab() === "About Us" ? styles.activeTab : ""}`}
-                    onClick={() => handleTabClick("About Us")}
+                    //onClick={() => handleTabClick("About Us")}
                 >
                     About Us
                 </Link>
