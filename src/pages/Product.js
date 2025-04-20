@@ -1,48 +1,43 @@
-//this is product.js file
-import React, { useState, useContext} from 'react';
-import Products from '../components/Products';
+import React, { useEffect, useState, useContext } from 'react';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import '../components/style.css';
 import { CartContext } from '../components/CartContext';
 
-
 const Product = () => {
+  const [products, setProducts] = useState([]);
   const [detail, setDetail] = useState([]);
-  const [close, setClose] = useState(false)
+  const [close, setClose] = useState(false);
   const [loadingGraph, setLoadingGraph] = useState(false);
-
-
-  //string for quanity
   const [quantity, setQuantity] = useState("1");
-  // Get addToCart from the global CartContext
   const { addToCart } = useContext(CartContext);
 
-  ////////////////////////////////////////////////////
+  // Fetch product data
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products/`)
+      .then(res => res.json())
+      .then(data => setProducts(data))
+      .catch(err => console.error("Error fetching products:", err));
+  }, []);
 
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = Products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
 
-  const totalPages = Math.ceil(Products.length / productsPerPage);
-
-
-  ///////////////////////////////////////////////////
-
+  const totalPages = Math.ceil(products.length / productsPerPage);
 
   const detailPage = async (product) => {
-    // optimized to counter slow runtimes
     setDetail([{ ...product, graph: null }]);
     setClose(true);
-    setQuantity("1"); // Reset quantity
-  
+    setQuantity("1");
     setLoadingGraph(true);
+
     try {
       const res = await fetch(`http://localhost:5000/generate-plot?product_id=${product.id}`);
       const data = await res.json();
-  
+
       if (data.image) {
         const imageUrl = `data:image/png;base64,${data.image}`;
         setDetail([{ ...product, graph: imageUrl }]);
@@ -53,8 +48,6 @@ const Product = () => {
       setLoadingGraph(false);
     }
   };
-
-
 
   return (
     <>
@@ -67,21 +60,20 @@ const Product = () => {
             {detail.map((x) => (
               <div key={x.id} className="detail_info">
                 <div className="img-box">
-                  <img src={x.img} alt={x.Title} />
+                  <img src="https://via.placeholder.com/200" alt={x.name} />
                 </div>
                 <div className="product_detail">
-                  <h2>{x.Title}</h2>
-                  <h3>${x.Price}</h3>
+                  <h2>{x.name}</h2>
+                  <h3>${x.current_price}</h3>
                   <div className="product_graph">
                     {loadingGraph ? (
                       <p>Loading price graph...</p>
                     ) : x.graph ? (
-                      <img src={x.graph} alt={`${x.Title} Price Graph`} />
+                      <img src={x.graph} alt={`${x.name} Price Graph`} />
                     ) : (
                       <p>No price graph available.</p>
                     )}
                   </div>
-                  {/* Quantity input */}
                   <div style={{ marginTop: '10px' }}>
                     <label htmlFor="quantityInput" style={{ marginRight: '8px' }}>
                       Quantity:
@@ -93,7 +85,6 @@ const Product = () => {
                       value={quantity}
                       onChange={(e) => setQuantity(e.target.value)}
                       onBlur={() => {
-                        // If the user clears the input or enters a number below 1, reset to "1"
                         if (!quantity || parseInt(quantity, 10) < 1) {
                           setQuantity("1");
                         }
@@ -101,12 +92,10 @@ const Product = () => {
                       style={{ width: '60px' }}
                     />
                   </div>
-                  {/* "Add to Cart" button */}
                   <button
                     onClick={() => {
-                      // Convert quantity to a number (default to 1 if NaN)
                       addToCart(x, parseInt(quantity, 10) || 1);
-                      setClose(false); // Optionally close the modal after adding
+                      setClose(false);
                     }}
                     style={{ marginTop: '15px' }}
                   >
@@ -119,18 +108,17 @@ const Product = () => {
         </div>
       )}
 
-
       <div className="container">
         {currentProducts.map((curElm) => (
           <div className="box" key={curElm.id}>
             <div className="content">
               <div className="img-box">
-                <img src={curElm.img} alt={curElm.Title} />
+                <img src="https://via.placeholder.com/150" alt={curElm.name} />
               </div>
               <div className="detail">
                 <div className="info">
-                  <h3>{curElm.Title}</h3>
-                  <p>${curElm.Price}</p>
+                  <h3>{curElm.name}</h3>
+                  <p>${curElm.current_price}</p>
                 </div>
                 <button onClick={() => detailPage(curElm)}>View</button>
               </div>
@@ -191,13 +179,8 @@ const Product = () => {
           Next
         </button>
       </div>
-
-
     </>
   );
 };
-
-
-
 
 export default Product;
