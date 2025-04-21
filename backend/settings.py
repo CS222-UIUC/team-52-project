@@ -14,6 +14,10 @@ import pymysql
 pymysql.install_as_MySQLdb()
 
 from pathlib import Path
+import os
+
+KROGER_CLIENT_ID     = os.environ.get("KROGER_CLIENT_ID")
+KROGER_CLIENT_SECRET = os.environ.get("KROGER_CLIENT_SECRET")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +32,12 @@ SECRET_KEY = 'django-insecure-8#l1yvyn!czpdih_ewdgr1=g!3tzt800e01(%tvo4zd&s-)7d@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '172.18.26.127',
+    '192.168.31.16',
+    '127.0.0.1',
+    '10.251.166.215',
+]
 
 SENDGRID_API_KEY = "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"
 DEFAULT_FROM_EMAIL = "yjian29@illinois.edu"
@@ -49,6 +58,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'products',
     'django_celery_beat',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -60,6 +70,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+  "http://localhost:3000",
+  # other origins…
 ]
 
 ROOT_URLCONF = 'backend.urls'
