@@ -107,6 +107,15 @@ const Products = [
         graph : '/images/basic-line-chart.svg'
 
     },
+    {
+        id: 999,
+        Title: 'product TEST',
+        img: '/images/edouard-gilles-a5JMF6XyFYI-unsplash.jpg',
+        Price:  10,
+        cat: 'fruit',
+        graph : '/images/basic-line-chart.svg'
+
+    },
     
 ]
 
