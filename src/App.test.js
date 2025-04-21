@@ -1,20 +1,22 @@
+/*import React from 'react';
 import { render, screen } from '@testing-library/react';
-//import App from './App';
-import App from './App.js';
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
-// test('renders learn react link', () => {
-//   render(<App />);
-//   const linkElement = screen.getByText(/learn react/i);
-//   expect(linkElement).toBeInTheDocument();
-// });
+import { MemoryRouter } from 'react-router-dom';
+import { CartProvider } from './components/CartContext';
+import App from './App';
+*/
+//tests wether the app renders without crashing
+//wraps app components insisde cartprovider 
+///////////////test not working!!!!!///////////
 /*
-test('correct background', () => {
-    render(<App />);
-    if (backgroundColor === "rgb(138, 187, 99)") {
-        console.log("background is green");
-    } else {
-        console.log("background isn't green")
-    }
-  });
+test('renders Home page on default route', () => {
+  render(
+    <CartProvider>
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+      </MemoryRouter>
+    </CartProvider>
+  );
+  // Assuming Home component displays a welcome message:
+  expect(screen.getByText(/Welcome/i)).toBeInTheDocument();
+});
 */

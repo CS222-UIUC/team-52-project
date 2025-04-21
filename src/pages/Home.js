@@ -1,8 +1,8 @@
 "use client";
 import { Link,  useLocation } from "react-router-dom"; 
-import React, { useState } from "react"; 
+import React, { useState, useEffect } from "react";
 import styles from "./TopBar.module.css";
-import Products from "../components/Products"; // Importing the Products component
+//import Products from "../components/Products"; // Importing the Products component
 import { AiFillCloseCircle } from "react-icons/ai"; // Importing the close icon from react-icons
 console.log("TopBar CSS imported");
 
@@ -122,28 +122,43 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
     const detailPage = async (product) => {
         // setDetail([{...product}]);
         // setClose(true);
+        setDetail([{ ...product, graph: null }]);
+        setClose(true);
+
+    
+        //setLoadingGraph(true);
         try {
-            const res = await fetch(`http://localhost:5000/generate-plot?product_id=${product.id}`);
-            const data = await res.json();
-        
-            if (data.image) {
-              // Add base64 graph to product
-              setDetail([{ ...product, graph: `data:image/png;base64,${data.image}` }]);
-            } else {
-              // No image returned
-              setDetail([{ ...product, graph: null }]);
-            }
-          } catch (error) {
-            console.error("Failed to fetch price graph:", error);
-            setDetail([{ ...product, graph: null }]);
-          }
-          setClose(true);
+        const res = await fetch(`http://localhost:5000/generate-plot?product_id=${product.id}`);
+        const data = await res.json();
+    
+        if (data.image) {
+            const imageUrl = `data:image/png;base64,${data.image}`;
+            setDetail([{ ...product, graph: imageUrl }]);
+        }
+        } catch (err) {
+        console.error("Error fetching price graph:", err);
+        } finally {
+        //setLoadingGraph(false);
+    }
     };
-    const popularProducts = Products
-    .slice(0, 8)
-    .filter(p => 
-        p.Title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const [popularProducts, setPopularProducts] = useState([]);
+
+    useEffect(() => {
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products/`)
+        .then((res) => res.json())
+        .then((data) => {
+          const filtered = data
+            .slice(0, 8)
+            .filter(p =>
+              p.Title.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+          setPopularProducts(filtered);
+        })
+        .catch((error) => {
+          console.error("Error fetching products:", error);
+        });
+    }, [searchQuery]);
+    
      // Inline styles for the new elements
     const homeStyles = {
         container: {

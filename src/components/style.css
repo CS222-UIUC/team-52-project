@@ -116,7 +116,6 @@
  }
 
  .detail_container .detail_content .detail_info .product_detail h2 {
-    text-transform: uppercase;
     font-weight:  200;
     margin: 0 0 0.5rem;
     color: #2c3e50;
@@ -181,5 +180,18 @@
  }
 
  .custom-footer {
-    background-color: #c8f3b6; /* Adjust to your preferred shade of green */
+    background-color: #c8f3b6; 
+}
+
+.multipage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap; 
+  }
+
+.multipage button {
+    margin: 4px;
 }
