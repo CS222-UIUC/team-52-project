@@ -14,6 +14,10 @@ import pymysql
 pymysql.install_as_MySQLdb()
 
 from pathlib import Path
+import os
+
+KROGER_CLIENT_ID     = os.environ.get("KROGER_CLIENT_ID")
+KROGER_CLIENT_SECRET = os.environ.get("KROGER_CLIENT_SECRET")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +32,12 @@ SECRET_KEY = 'django-insecure-8#l1yvyn!czpdih_ewdgr1=g!3tzt800e01(%tvo4zd&s-)7d@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '172.18.26.127',
+    '192.168.31.16',
+    '127.0.0.1',
+    '10.251.166.215',
+]
 
 SENDGRID_API_KEY = "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"
 DEFAULT_FROM_EMAIL = "yjian29@illinois.edu"
@@ -39,17 +48,21 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',  # <- Adeded - jen
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'products',
     'django_celery_beat',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+  'corsheaders.middleware.CorsMiddleware',  # < added - jen
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -57,6 +70,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+  "http://localhost:3000",
+  # other origins…
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -82,7 +101,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -93,6 +111,7 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+
 
 
 # Password validation
@@ -119,7 +138,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Chicago'
 
 USE_I18N = True
 
@@ -139,3 +158,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+CORS_ALLOW_ALL_ORIGINS = True # <- Added - jen

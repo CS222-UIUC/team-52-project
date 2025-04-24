@@ -1,8 +1,8 @@
 "use client";
 import { Link,  useLocation } from "react-router-dom"; 
-import React, { useState } from "react"; 
+import React, { useState, useEffect } from "react";
 import styles from "./TopBar.module.css";
-import Products from "../components/Products"; // Importing the Products component
+//import Products from "../components/Products"; // Importing the Products component
 import { AiFillCloseCircle } from "react-icons/ai"; // Importing the close icon from react-icons
 console.log("TopBar CSS imported");
 
@@ -140,11 +140,24 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
         //setLoadingGraph(false);
     }
     };
-    const popularProducts = Products
-    .slice(0, 8)
-    .filter(p => 
-        p.Title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const [popularProducts, setPopularProducts] = useState([]);
+
+    useEffect(() => {
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products/`)
+        .then((res) => res.json())
+        .then((data) => {
+          const filtered = data
+            .slice(0, 8)
+            .filter(p =>
+              p.Title.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+          setPopularProducts(filtered);
+        })
+        .catch((error) => {
+          console.error("Error fetching products:", error);
+        });
+    }, [searchQuery]);
+    
      // Inline styles for the new elements
     const homeStyles = {
         container: {

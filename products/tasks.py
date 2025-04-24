@@ -2,21 +2,41 @@ from celery import shared_task
 from django.conf import settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from .models import PriceAlert
+from .models import PriceAlert, Product, PriceHistory
 from celery import shared_task
 from .utils import search_kroger_products
+from django.utils import timezone
+import requests
+# from .utils import fetch_price_for_product  # you’d write this
 
 @shared_task
-def fetch_kroger_data():
+def seed_kroger_products():
+    """Run once to grab 9 items, one per keyword."""
+    keywords = ["bread","eggs","fruit","dairy","meat","veggies","oil","sriracha","cereal"]
+    kept_ids = []
+    for kw in keywords:
+        p = search_kroger_products(kw)
+        if p:
+            kept_ids.append(p.product_id)
 
-    data = search_kroger_products("eggs")
-    print(f"Fetched data for eggs: {data}")
-    
-    data = search_kroger_products("milk")
-    print(f"Fetched data for milk: {data}")
-    
-    data = search_kroger_products("bread")
-    print(f"Fetched data for bread: {data}")
+    # delete any Product not in our 9
+    Product.objects.exclude(product_id__in=kept_ids).delete()
+
+@shared_task
+def update_kroger_prices():
+    """Runs every interval to refresh price & history for existing Products."""
+    now = timezone.now()
+    for prod in Product.objects.all():
+        # re‑use our helper, but this time fetch by keyword=prod.product_id
+        # (or write a separate fetch_price_by_id version if you prefer)
+        updated = search_kroger_products(prod.product_id)
+        if updated:
+            # record history
+            PriceHistory.objects.create(
+                product=updated,
+                price=updated.current_price,
+                timestamp=now
+            )
 
 @shared_task
 def check_price_alerts():
