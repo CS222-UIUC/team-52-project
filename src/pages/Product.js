@@ -93,14 +93,27 @@ const Product = () => {
                     />
                   </div>
                   <button
-                    onClick={() => {
-                      addToCart(x, parseInt(quantity, 10) || 1);
-                      setClose(false);
-                    }}
-                    style={{ marginTop: '15px' }}
-                  >
-                    Add to Cart
-                  </button>
+  onClick={async () => {
+    try {
+      console.log("Product object:", x);
+      console.log("Product ID:", x.product_id);
+
+      const success = await addToCart(x.product_id, parseInt(quantity, 10) || 1);
+      if (success) {
+        setClose(false);
+      } else {
+        alert("Failed to add to cart!");
+      }
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+      alert("An error occurred.");
+    }
+  }}
+  style={{ marginTop: '15px' }}
+>
+  Add to Cart
+</button>
+
                 </div>
               </div>
             ))}
