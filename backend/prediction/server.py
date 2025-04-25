@@ -16,7 +16,7 @@ CORS(app)  # allow frontend requests
 
 # MySQL connection
 db = mysql.connector.connect(
-    host='10.251.129.12',
+    host='localhost', # Change to whereever MySQL DB server instance is running
     user='django_user',
     password='Anaboeing787',
     database='kroger_db'

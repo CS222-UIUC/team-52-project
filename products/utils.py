@@ -1,75 +1,100 @@
 from .models import Product, PriceHistory, PriceAlert
 import requests
-
+from celery import shared_task
 #for testing sendgrid email
 import logging
+from requests.auth import HTTPBasicAuth
 from django.conf import settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from django.utils import timezone
+import logging
+import requests
+from json.decoder import JSONDecodeError
+from django.conf import settings
 #for testing sendgrid email
 
-KROGER_CLIENT_ID = "grocerygauge-243261243034242f6863354a64535762396c68434f74357059664b714f58515633327a2f4a734c657243516864345865724a79396462476c444676759164103456257333400"
-KROGER_CLIENT_SECRET = "dfumzU6kRGFuQnUzyskG89AEW1biXGKScXPVO8fs"
+# KROGER_CLIENT_ID = "grocerygauge-243261243034242f6863354a64535762396c68434f74357059664b714f58515633327a2f4a734c657243516864345865724a79396462476c444676759164103456257333400"
+# KROGER_CLIENT_SECRET = "rbR2riiPjlrpFfrRglgpk8qfu0FlJKmDEmxLkpwd"
+
+logger = logging.getLogger(__name__)
 
 def get_kroger_access_token():
+    client_id     = settings.KROGER_CLIENT_ID
+    client_secret = settings.KROGER_CLIENT_SECRET
+    if not client_id or not client_secret:
+        raise RuntimeError("Kroger credentials not set in settings")
+
     url = "https://api.kroger.com/v1/connect/oauth2/token"
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
     data = {
         "grant_type": "client_credentials",
-        "client_id": KROGER_CLIENT_ID,
-        "client_secret": KROGER_CLIENT_SECRET,
-        "scope": "product.compact"
+        "scope":      "product.compact",
     }
-    response = requests.post(url, headers=headers, data=data)
-    return response.json().get("access_token")
+
+    # use Basic Auth with your client id/secret
+    resp = requests.post(
+        url,
+        headers=headers,
+        data=data,
+        auth=(settings.KROGER_CLIENT_ID, settings.KROGER_CLIENT_SECRET)
+    )
+
+    if resp.status_code != 200:
+        logger.error(f"Kroger auth failed {resp.status_code}: {resp.text}")
+        raise RuntimeError("Could not fetch Kroger access token")
+    token = resp.json().get("access_token")
+    if not token:
+        raise RuntimeError("Kroger returned no access_token")
+    return token
 
 def search_kroger_products(keyword, location_id="01400943"):
     """Search for products using a keyword."""
     access_token = get_kroger_access_token()
+    if not access_token:
+        raise RuntimeError("Could not fetch Kroger access token")
     url = "https://api.kroger.com/v1/products"
     headers = {"Authorization": f"Bearer {access_token}"}
     
     params = {
         "filter.term": keyword,
         "filter.locationId": location_id,
-        "limit": 10
+        "limit": 1
     }
     
-    response = requests.get(url, headers=headers, params=params)
-    response.raise_for_status()
-    
-    data = response.json()  # This is the full Kroger response
-    product_list = data.get("data", [])  # An array of product objects
+    resp = requests.get(url, headers=headers, params=params)
+    resp.raise_for_status()
+    data = resp.json().get("data", [])
 
-    for item in product_list:
-        product_id = item["productId"]
-        name = item.get("description", "No Name")
-        brand = item.get("brand", "")
-        upc = item.get("upc")
-        # "items" array often holds pricing info
-        # Example: item["items"][0]["price"]["regular"]
-        price_info = item["items"][0].get("price", {})
-        current_price = price_info.get("regular", 0.0)
-        
-        # Save to DB (create or update existing product)
-        product, created = Product.objects.update_or_create(
-            product_id=product_id,
-            defaults={
-                "name": name,
-                "brand": brand,
-                "upc": upc,
-                "current_price": current_price
-            }
-        )
-        
-        # product.last_updated = timezone.now()
-        # product.save(update_fields=["last_updated"])
-        
-        # Optionally, you can add a separate model for PriceHistory here
-        PriceHistory.objects.create(product=product, price=current_price)
+    if not data:
+        return None
 
-    return data  # Or return something if you still want the raw data
+    item = data[0]
+    # pull out fields
+    pid   = item["productId"]
+    name  = item.get("description", "No Name")
+    brand = item.get("brand", "")
+    upc   = item.get("upc")
+    # price is nested under items → [0] → price → regular
+    price = (
+        item.get("items", [{}])[0]
+            .get("price", {})
+            .get("regular", 0.0)
+    )
+
+    # 2) upsert our Product row
+    product, created = Product.objects.update_or_create(
+        product_id=pid,
+        defaults={
+            "name":          name,
+            "brand":         brand,
+            "upc":           upc,
+            "current_price": price,
+            "last_updated":  timezone.now(),
+        }
+    )
+
+    return product
 
 
 #for testing sendgrid email
