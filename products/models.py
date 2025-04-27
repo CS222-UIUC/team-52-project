@@ -1,5 +1,4 @@
 from django.db import models
-
 # Create your models here.
 
 class Product(models.Model):
@@ -30,3 +29,12 @@ class PriceAlert(models.Model):
 
     def __str__(self):
         return f"Alert for {self.product.name} under ${self.target_price}"
+    
+    #jen added for add to cart functionality using endpoint 
+class CartItem(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    session_id = models.CharField(max_length=255)  # or user if you're using auth
+
+    def __str__(self):
+        return f"{self.product.name} x {self.quantity}"
