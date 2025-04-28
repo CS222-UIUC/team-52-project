@@ -7,6 +7,7 @@ from celery import shared_task
 from .utils import search_kroger_products
 from django.utils import timezone
 import requests
+from .utils import get_kroger_access_token
 # from .utils import fetch_price_for_product  # you’d write this
 
 @shared_task
@@ -14,12 +15,41 @@ def seed_kroger_products():
     """Run once to grab 9 items, one per keyword."""
     keywords = ["bread","eggs","fruit","dairy","meat","veggies","oil","sriracha","cereal"]
     kept_ids = []
+    token = get_kroger_access_token()
     for kw in keywords:
-        p = search_kroger_products(kw)
-        if p:
-            kept_ids.append(p.product_id)
+        # term search, exactly the same as your original helper
+        url = "https://api.kroger.com/v1/products"
+        headers = {"Authorization": f"Bearer {token}"}
+        params = {
+            "filter.term":       kw,
+            "filter.locationId": "01400943",
+            "limit":             1,
+        }
+        resp = requests.get(url, headers=headers, params=params)
+        resp.raise_for_status()
+        data = resp.json().get("data", [])
+        if not data:
+            continue
+        item = data[0]
+        pid   = item["productId"]
+        name  = item.get("description","")
+        brand = item.get("brand","")
+        upc   = item.get("upc")
+        price = item.get("items",[{}])[0].get("price",{}).get("regular",0.0)
+        # upsert that product
+        Product.objects.update_or_create(
+            product_id=pid,
+            defaults={
+                "name":          name,
+                "brand":         brand,
+                "upc":           upc,
+                "current_price": price,
+                "last_updated":  timezone.now(),
+            }
+        )
+        kept_ids.append(pid)
 
-    # delete any Product not in our 9
+    # delete everything _except_ our nine
     Product.objects.exclude(product_id__in=kept_ids).delete()
 
 @shared_task
@@ -27,16 +57,14 @@ def update_kroger_prices():
     """Runs every interval to refresh price & history for existing Products."""
     now = timezone.now()
     for prod in Product.objects.all():
-        # re‑use our helper, but this time fetch by keyword=prod.product_id
-        # (or write a separate fetch_price_by_id version if you prefer)
-        updated = search_kroger_products(prod.product_id)
-        if updated:
-            # record history
-            PriceHistory.objects.create(
-                product=updated,
-                price=updated.current_price,
-                timestamp=now
-            )
+        item = search_kroger_products(prod.product_id)
+        if not item:
+            continue
+        price = item["items"][0]["price"]["regular"]
+        prod.current_price = price
+        prod.last_updated = now
+        prod.save()
+        PriceHistory.objects.create(product=prod, price=price, timestamp=now)
 
 @shared_task
 def check_price_alerts():

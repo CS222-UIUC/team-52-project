@@ -48,54 +48,44 @@ def get_kroger_access_token():
         raise RuntimeError("Kroger returned no access_token")
     return token
 
-def search_kroger_products(keyword, location_id="01400943"):
+def search_kroger_products(product_id, location_id="01400943"):
     """Search for products using a keyword."""
     access_token = get_kroger_access_token()
     if not access_token:
         raise RuntimeError("Could not fetch Kroger access token")
-    url = "https://api.kroger.com/v1/products"
+    url = f"https://api.kroger.com/v1/products/{product_id}"
     headers = {"Authorization": f"Bearer {access_token}"}
-    
-    params = {
-        "filter.term": keyword,
-        "filter.locationId": location_id,
-        "limit": 1
-    }
-    
+    params = {"filter.locationId": location_id}
     resp = requests.get(url, headers=headers, params=params)
     resp.raise_for_status()
-    data = resp.json().get("data", [])
-
-    if not data:
+    data = resp.json().get("data")
+    if isinstance(data, dict):
+        item = data
+    elif isinstance(data, list) and data:
+        item = data[0]
+    else:
         return None
 
-    item = data[0]
-    # pull out fields
-    pid   = item["productId"]
-    name  = item.get("description", "No Name")
-    brand = item.get("brand", "")
-    upc   = item.get("upc")
-    # price is nested under items → [0] → price → regular
-    price = (
-        item.get("items", [{}])[0]
-            .get("price", {})
-            .get("regular", 0.0)
-    )
-
-    # 2) upsert our Product row
+    # grab the first image URL, if any
+    image_url = item.get("images", [{}])[0].get("url", "")
+    
+    # upsert our Product, now including image_url
     product, created = Product.objects.update_or_create(
-        product_id=pid,
+        product_id=product_id,
         defaults={
-            "name":          name,
-            "brand":         brand,
-            "upc":           upc,
-            "current_price": price,
+            "name":          item.get("description", ""),
+            "brand":         item.get("brand", ""),
+            "upc":           item.get("upc"),
+            "current_price": (
+                item.get("items", [{}])[0]
+                    .get("price", {})
+                    .get("regular", 0.0)
+            ),
             "last_updated":  timezone.now(),
+            "image_url":     image_url,
         }
     )
-
-    return product
-
+    return item
 
 #for testing sendgrid email
 
