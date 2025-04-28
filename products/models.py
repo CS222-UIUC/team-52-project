@@ -8,6 +8,7 @@ class Product(models.Model):
     upc = models.CharField(max_length=50, null=True, blank=True)
     current_price = models.FloatField(null=True, blank=True)
     last_updated = models.DateTimeField(auto_now=True)
+    image_url      = models.URLField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return f"{self.name} (${self.current_price})"
