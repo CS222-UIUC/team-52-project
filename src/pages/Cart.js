@@ -1,43 +1,36 @@
-// src/pages/Cart.js
-import React, { useContext, useState, useEffect  } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { CartContext } from '../components/CartContext';
 import styles from './Cart.module.css';
 
-
 function Cart() {
-  const { cartItems, removeFromCart,updateQuantity } = useContext(CartContext);
- 
+  const { cartItems, removeFromCart, updateQuantity } = useContext(CartContext);
   const [quantityInputs, setQuantityInputs] = useState({});
- 
-  // When cartItems change, initialize or update our quantityInputs
+
+  // Update quantityInputs state when cartItems change
   useEffect(() => {
-    const newInputs = {};
+    const inputs = {};
     cartItems.forEach((item) => {
-      newInputs[item.id] = item.quantity.toString();
+      inputs[item.id] = item.quantity.toString();
     });
-    setQuantityInputs(newInputs);
+    setQuantityInputs(inputs);
   }, [cartItems]);
 
-
-  // Multiply each product's price by its quantity
-  const totalPrice = cartItems.reduce((total, product) =>
-    total + product.Price * (product.quantity || 1), 0
-  );
-
-
-  //update quantity both locally and in the global context
-  const handleQuantityUpdate = (productId, value) => {
+  const handleQuantityUpdate = (cartItemId, value) => {
     let newVal = value;
     if (!newVal || parseInt(newVal, 10) < 1) {
       newVal = "1";
     }
     setQuantityInputs({
       ...quantityInputs,
-      [productId]: newVal,
+      [cartItemId]: newVal,
     });
-    updateQuantity(productId, parseInt(newVal, 10));
+    updateQuantity(cartItemId, parseInt(newVal, 10));
   };
 
+  const totalPrice = cartItems.reduce(
+    (total, item) => total + item.product.current_price * item.quantity,
+    0
+  );
 
   return (
     <div className={styles.cartContainer}>
@@ -46,44 +39,40 @@ function Cart() {
         <p className={styles.emptyMessage}>Your cart is empty.</p>
       ) : (
         <div className={styles.cartItems}>
-          {cartItems.map((product) => {
+          {cartItems.map((item) => {
             const inputValue =
-              quantityInputs[product.id] !== undefined
-                ? quantityInputs[product.id]
-                : product.quantity.toString();
-
+              quantityInputs[item.id] !== undefined
+                ? quantityInputs[item.id]
+                : item.quantity.toString();
 
             return (
-              <div key={product.id} className={styles.cartItem}>
+              <div key={item.id} className={styles.cartItem}>
                 <img
-                  src={product.img}
-                  alt={product.Title}
+                  src="https://via.placeholder.com/150"
+                  alt={item.product.name}
                   className={styles.itemImage}
                 />
                 <div className={styles.itemInfo}>
-                  <h3 className={styles.itemTitle}>{product.Title}</h3>
+                  <h3 className={styles.itemTitle}>{item.product.name}</h3>
                   <div className={styles.quantityContainer}>
-                    <label htmlFor={`quantity-${product.id}`}>
-                      Quantity:&nbsp;
-                    </label>
+                    <label htmlFor={`quantity-${item.id}`}>Quantity: </label>
                     <input
-                      id={`quantity-${product.id}`}
+                      id={`quantity-${item.id}`}
                       type="number"
                       min="1"
                       value={inputValue}
                       onChange={(e) =>
                         setQuantityInputs({
                           ...quantityInputs,
-                          [product.id]: e.target.value,
+                          [item.id]: e.target.value,
                         })
                       }
                       onBlur={(e) =>
-                        handleQuantityUpdate(product.id, e.target.value)
+                        handleQuantityUpdate(item.id, e.target.value)
                       }
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          handleQuantityUpdate(product.id, e.target.value);
-                          // Remove focus so that onBlur is also triggered (if needed)
+                          handleQuantityUpdate(item.id, e.target.value);
                           e.target.blur();
                         }
                       }}
@@ -91,14 +80,14 @@ function Cart() {
                     />
                   </div>
                   <p className={styles.itemPrice}>
-                    ${product.Price} x {product.quantity}
+                    ${item.product.current_price} x {item.quantity}
                   </p>
                   <p className={styles.itemSubtotal}>
-                    Subtotal: ${(product.Price * product.quantity).toFixed(2)}
+                    Subtotal: ${(item.product.current_price * item.quantity).toFixed(2)}
                   </p>
                   <button
                     className={styles.removeButton}
-                    onClick={() => removeFromCart(product.id)}
+                    onClick={() => removeFromCart(item.id)}
                   >
                     Remove from Cart
                   </button>
@@ -108,13 +97,12 @@ function Cart() {
           })}
           <div className={styles.cartTotal}>
             <h3>Total: ${totalPrice.toFixed(2)}</h3>
-            <button className={styles.checkoutButton}>
-              Proceed to Checkout
-            </button>
+            <button className={styles.checkoutButton}>Proceed to Checkout</button>
           </div>
         </div>
       )}
     </div>
   );
 }
+
 export default Cart;

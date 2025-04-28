@@ -118,6 +118,8 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
     //const popularProducts = Products.slice(0, 8);
     const [detail, setDetail] = useState([]);
     const [close, setClose] = useState(false);
+    const [products, setProducts] = useState([]);
+
 
     const detailPage = async (product) => {
         // setDetail([{...product}]);
@@ -133,6 +135,7 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
     
         if (data.image) {
             const imageUrl = `data:image/png;base64,${data.image}`;
+            
             setDetail([{ ...product, graph: imageUrl }]);
         }
         } catch (err) {
@@ -147,17 +150,18 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
       fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products/`)
         .then((res) => res.json())
         .then((data) => {
-          const filtered = data
-            .slice(0, 8)
-            .filter(p =>
-              p.Title.toLowerCase().includes(searchQuery.toLowerCase())
-            );
-          setPopularProducts(filtered);
-        })
+            setProducts(data);
+            const popularIds = [19, 90, 4006, 110];
+            const filtered = data.filter(product => popularIds.includes(product.id));
+            setPopularProducts(filtered);
+          })
         .catch((error) => {
           console.error("Error fetching products:", error);
         });
-    }, [searchQuery]);
+    }, []);
+    const filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     
      // Inline styles for the new elements
     const homeStyles = {
@@ -257,44 +261,102 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
             
             {/* Product Grid */}
             <h2 className={styles.title} style={{ margin: '20px 0 10px' }}>Popular Picks</h2>
-            
-            <div style={homeStyles.productGrid}>
-                {popularProducts.map((product) => (
-                    <div 
-                        key={product.id} 
-                        style={homeStyles.productCard}
-                        onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
-                        onMouseLeave={e => e.currentTarget.style.transform = ''}
-                    >
-                        <img 
-                            src={product.img} 
-                            alt={product.Title} 
-                            style={{
-                                width: '100%',
-                                height: '180px',
-                                objectFit: 'cover',
-                                borderRadius: '5px'
-                            }}
-                        />
-                        <h3 style={{ margin: '10px 0 5px', color: '#2c3e50' }}>{product.Title}</h3>
-                        <p style={{ color: 'rgb(138, 187, 99)', fontWeight: 'bold' }}>${product.Price}</p>
-                        <button 
-                            onClick={() => detailPage(product)}
-                            style={{
-                                background: 'rgb(138, 187, 99)',
-                                color: 'white',
-                                border: 'none',
-                                padding: '8px 15px',
-                                borderRadius: '4px',
-                                cursor: 'pointer',
-                                width: '100%'
-                            }}
-                        >
-                            View Details
-                        </button>
-                    </div>
-                ))}
-            </div>
+
+<div style={homeStyles.productGrid}>
+  {popularProducts.map((product) => (
+    <div 
+    key={product.id}
+    style={{
+      border: '1px solid #eee',
+      borderRadius: '8px',
+      padding: '15px',
+      height: '420px',  // <-- fix total height
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      boxSizing: 'border-box'
+    }}
+  >
+    {/* Product Image */}
+    <div style={{ height: '180px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <img 
+        src={product.image_url || "https://thaka.bing.com/th/id/OIP.RCFyflqWgpQq07U0Tm3IQQHaHw?rs=1&pid=ImgDetMain"}
+        alt={product.name}
+        style={{
+          maxHeight: '100%',
+          maxWidth: '100%',
+          objectFit: 'contain', // <<-- 🔥 very important
+          borderRadius: '5px'
+        }}
+      />
+    </div>
+  
+    {/* Product Name */}
+    <div style={{ 
+      minHeight: '70px', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      textAlign: 'center',
+      padding: '5px'
+    }}>
+      <h3 style={{ margin: '0', fontSize: '1.2rem', color: '#2c3e50' }}>
+        {product.name}
+      </h3>
+    </div>
+  
+    {/* Price */}
+    <p style={{ color: 'rgb(138, 187, 99)', fontWeight: 'bold', margin: '10px 0' }}>
+      ${product.current_price}
+    </p>
+  
+    {/* View Details Button */}
+    <button 
+      onClick={() => detailPage(product)}
+      style={{
+        background: 'rgb(138, 187, 99)',
+        color: 'white',
+        border: 'none',
+        padding: '10px 20px',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        width: '100%'
+      }}
+    >
+      View Details
+    </button>
+  </div>  
+  ))}
+</div>
+{searchQuery && (
+  <>
+    <h2 className={styles.title} style={{ margin: '20px 0 10px' }}>Search Results</h2>
+    <div style={homeStyles.productGrid}>
+      {filteredProducts.length > 0 ? (
+        filteredProducts.map((product) => (
+          <div key={product.id} style={homeStyles.productCard}>
+            <img 
+              src={product.image_url || "https://via.placeholder.com/150"} 
+              alt={product.name}
+              style={{
+                width: '100%',
+                height: '180px',
+                objectFit: 'cover',
+                borderRadius: '5px'
+              }}
+            />
+            <h3>{product.name}</h3>
+            <p>${product.current_price}</p>
+          </div>
+        ))
+      ) : (
+        <p>No results found.</p>
+      )}
+    </div>
+  </>
+)}
+
 
             {/* Detail Modal */}
             {close && (
@@ -350,7 +412,7 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
                                         fontSize: '1.2rem',
                                         fontWeight: 'bold'
                                     }}>
-                                        ${item.Price}
+                                        ${item.current_price}
                                     </p>
                                     {item.graph ? (
                                         <img 
