@@ -122,22 +122,71 @@ const Product = () => {
       )}
 
       <div className="container">
-        {currentProducts.map((curElm) => (
-          <div className="box" key={curElm.id}>
-            <div className="content">
-              <div className="img-box">
-                <img src="https://via.placeholder.com/150" alt={curElm.name} />
-              </div>
-              <div className="detail">
-                <div className="info">
-                  <h3>{curElm.name}</h3>
-                  <p>${curElm.current_price}</p>
-                </div>
-                <button onClick={() => detailPage(curElm)}>View</button>
-              </div>
-            </div>
-          </div>
-        ))}
+      {currentProducts.map((curElm) => (
+  <div
+    key={curElm.id}
+    style={{
+      border: '1px solid #eee',
+      borderRadius: '8px',
+      padding: '15px',
+      height: '420px',  // same fixed height
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      boxSizing: 'border-box',
+      margin: '10px' // space between cards
+    }}
+  >
+    {/* Product Image */}
+    <div style={{ height: '180px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <img
+        src={curElm.image_url || "https://thaka.bing.com/th/id/OIP.RCFyflqWgpQq07U0Tm3IQQHaHw?rs=1&pid=ImgDetMain"}
+        alt={curElm.name}
+        style={{
+          maxHeight: '100%',
+          maxWidth: '100%',
+          objectFit: 'contain',
+          borderRadius: '5px'
+        }}
+      />
+    </div>
+
+    {/* Product Name */}
+    <div style={{
+      minHeight: '70px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center',
+      padding: '5px'
+    }}>
+      <h3 style={{ margin: '0', fontSize: '1.2rem', color: '#2c3e50' }}>{curElm.name}</h3>
+    </div>
+
+    {/* Price */}
+    <p style={{ color: 'rgb(138, 187, 99)', fontWeight: 'bold', margin: '10px 0' }}>
+      ${curElm.current_price}
+    </p>
+
+    {/* View Button */}
+    <button
+      onClick={() => detailPage(curElm)}
+      style={{
+        background: 'rgb(138, 187, 99)',
+        color: 'white',
+        border: 'none',
+        padding: '10px 20px',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        width: '100%'
+      }}
+    >
+      View
+    </button>
+  </div>
+))}
+
       </div>
 
       <div className="multipage" style={{ marginTop: '20px', textAlign: 'center' }}>
