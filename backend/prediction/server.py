@@ -9,6 +9,7 @@ import mysql.connector
 from datetime import datetime, timedelta
 import numpy as np
 from xgboost import XGBRegressor
+import seaborn as sns
 
 matplotlib.use('Agg')
 app = Flask(__name__)
@@ -24,10 +25,11 @@ db = mysql.connector.connect(
 
 def fetch_price_history(product_id):
     cursor = db.cursor()
+    # Change interval as needed to fetch more or less data
     query = """
         SELECT price, timestamp
         FROM products_pricehistory
-        WHERE product_id = %s AND timestamp >= NOW() - INTERVAL 30 DAY
+        WHERE product_id = %s AND timestamp >= NOW() - INTERVAL 100 DAY
         ORDER BY timestamp ASC
     """
     cursor.execute(query, (product_id,))
@@ -49,7 +51,7 @@ def generate_plot():
     df['timestamp'] = pd.to_datetime(df['timestamp'])
     df = df.sort_values('timestamp')
 
-    # 🔥 Preserve the full original price trend (before dropna)
+    # Preserve full data for actual trend
     full_actual_dates = df['timestamp'].copy()
     full_actual_prices = df['price'].copy()
 
@@ -79,40 +81,48 @@ def generate_plot():
         last_known = np.roll(last_known, -1)
         last_known[-1] = pred
 
-    # --- Plot full actual data (including rows dropped for lag features) ---
-    plt.figure(figsize=(8, 4))
-    #plt.plot(full_actual_dates, full_actual_prices, label='Actual Price', marker='o')
+    # --- Plot ---
+    sns.set_style("whitegrid")
+    plt.figure(figsize=(10, 5))
 
-    # --- Plot predictions ---
-    # Get the last actual point
+    # Actual prices
+    plt.plot(full_actual_dates, full_actual_prices, label='Actual Price', marker='o', color='black')
+
+    # Gradient fill under the actual line
+    plt.fill_between(full_actual_dates, full_actual_prices, color='lightgrey', alpha=0.5)
+
+    # Forecast line
     last_actual_date = full_actual_dates.iloc[-1]
     last_actual_price = full_actual_prices.iloc[-1]
 
-    # Connect the last actual point to the predictions
     prediction_dates_full = [last_actual_date] + future_dates
     prediction_prices_full = [last_actual_price] + future_predictions
 
-    # Plot the dotted forecast line with no marker on the last actual point
     plt.plot(prediction_dates_full, prediction_prices_full, linestyle='dotted', color='blue', label='Predicted Price')
-
-    # Plot the actual prices with markers (so that it appears on top of the forecast line)
-    plt.plot(full_actual_dates, full_actual_prices, label='Actual Price', marker='o')
-
-    # Plot only the prediction markers 
     plt.scatter(future_dates, future_predictions, color='blue', marker='o')
 
+    # Annotate the last predicted point
+    final_pred_date = future_dates[-1]
+    final_pred_price = future_predictions[-1]
+    plt.annotate(f"${final_pred_price:.2f}\n{final_pred_date.strftime('%b %d')}",
+                 xy=(final_pred_date, final_pred_price),
+                 xytext=(10, -20),
+                 textcoords='offset points',
+                 arrowprops=dict(arrowstyle='->', color='blue'),
+                 fontsize=9,
+                 color='blue')
 
-    # Dynamic y-axis bounds
+    # Dynamic y-axis
     mean_price = full_actual_prices.mean()
     plt.ylim(mean_price - 0.20, mean_price + 0.20)
 
-    plt.title("Price Trend & 2-Day Forecast")
+    plt.title("Price Trend & 2-Day Forecast", fontsize=16)
     plt.xlabel("Date")
     plt.ylabel("Price ($)")
-    plt.grid(True)
     plt.xticks(rotation=45)
     plt.legend()
     plt.tight_layout()
+    plt.grid(axis='x')
 
     # Save as base64
     buf = BytesIO()

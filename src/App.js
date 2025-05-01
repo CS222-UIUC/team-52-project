@@ -8,7 +8,7 @@ import Footer from "./components/Footer"; //import footer
 import 'bootstrap/dist/css/bootstrap.min.css' //bootstrap
 import React, { useState } from 'react';
 import { CartProvider } from './components/CartContext';
-
+//import logo from '../src/logo.png';
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
 

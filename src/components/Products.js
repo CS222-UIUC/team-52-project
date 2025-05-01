@@ -40,7 +40,14 @@ const Products = [
       graph : '/images/basic-line-chart.svg'
 
   },
-  
+  {
+    id: 1,
+    Title: 'product 1',
+    img: '/images/anh-nguyen-kcA-c3f_3FE-unsplash.jpg',
+    Price:  10,
+    cat: 'fruit',
+    graph : '/images/basic-line-chart.svg'
+  }
 ]
 */
 
