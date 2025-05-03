@@ -42,7 +42,11 @@ export function TopBar({ searchQuery, setSearchQuery }) {
         <header className={styles.topBar}>
         {/* Left section (logo + title) */}
         <div className={styles.leftSection}>  
-            <div className={styles.logoPlaceholder} />
+        <img 
+            src="/images/OIP.jpg" 
+            alt="GroceryGauge Logo" 
+            className={styles.logo}
+            />
             <h1 className={styles.title}>GroceryGauge</h1>
         </div>
 

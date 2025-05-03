@@ -10,7 +10,7 @@ function Footer() {
               <h6>Information</h6>
               <hr />
               <p className="text-black">
-                Grocery-Gauge Grocery-Gauge Grocery-Gauge Grocery-Gauge Grocery-Gauge Grocery-Gauge Grocery-Gauge
+              Grocery Gauge helps shoppers track grocery price inflation and find the best deals across different stores. Our goal is to make budgeting easier by providing real-time price comparisons and historical trends.
               </p>
             </div>
             <div className="col-12 col-md-4">
