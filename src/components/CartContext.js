@@ -1,72 +1,37 @@
-import React, { createContext, useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { createContext, useState } from 'react';
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
-  const sessionId = 'test-session-id'; // You can improve this later
-  const baseURL = 'http://10.251.168.243:8000'; // Update if needed
-
-  //  Load cart items on mount
-  useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        const res = await axios.get(`${baseURL}/api/cart/?session_id=${sessionId}`);
-        setCartItems(res.data);
-      } catch (err) {
-        console.error("Error loading cart:", err);
+  const addToCart = (product, quantity = 1) => {
+    setCartItems(prevItems => {
+      const existing = prevItems.find(item => item.product.product_id === product.product_id);
+      if (existing) {
+        return prevItems.map(item =>
+          item.product.product_id === product.product_id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
+      } else {
+        return [...prevItems, { product, quantity }];
       }
-    };
-
-    fetchCartItems(); // call it inside useEffect
-  }, []);
-
-  //  Add item to cart
-  const addToCart = async (productId, quantity = 1) => {
-    try {
-      await axios.post(`${baseURL}/api/cart/add/`, {
-        product_id: productId,
-        quantity,
-        session_id: sessionId,
-      });
-  
-      // Refetch updated cart
-      const res = await axios.get(`${baseURL}/api/cart/?session_id=${sessionId}`);
-      setCartItems(res.data);
-  
-      return { success: true };
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-      return { success: false };
-    }
+    });
   };
 
-  // Remove item from cart
-  const removeFromCart = async (cartItemId) => {
-    try {
-      await axios.delete(`${baseURL}/api/cart/remove/${cartItemId}/`);
-      setCartItems(prevItems => prevItems.filter(item => item.id !== cartItemId));
-    } catch (error) {
-      console.error("Failed to remove item from cart:", error);
-    }
+  const removeFromCart = (productId) => {
+    setCartItems(prevItems => prevItems.filter(item => item.product.product_id !== productId));
   };
 
-  //  Update item quantity
-  const updateQuantity = async (cartItemId, newQuantity) => {
-    try {
-      const response = await axios.patch(`${baseURL}/api/cart/update/${cartItemId}/`, {
-        quantity: newQuantity,
-      });
-      setCartItems(prevItems =>
-        prevItems.map(item =>
-          item.id === cartItemId ? { ...item, quantity: response.data.quantity } : item
-        )
-      );
-    } catch (error) {
-      console.error("Failed to update cart quantity:", error);
-    }
+  const updateQuantity = (productId, newQuantity) => {
+    setCartItems(prevItems =>
+      prevItems.map(item =>
+        item.product.product_id === productId
+          ? { ...item, quantity: newQuantity }
+          : item
+      )
+    );
   };
 
   return (

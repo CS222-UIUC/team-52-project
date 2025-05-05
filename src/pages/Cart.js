@@ -6,25 +6,24 @@ function Cart() {
   const { cartItems, removeFromCart, updateQuantity } = useContext(CartContext);
   const [quantityInputs, setQuantityInputs] = useState({});
 
-  // Update quantityInputs state when cartItems change
   useEffect(() => {
     const inputs = {};
     cartItems.forEach((item) => {
-      inputs[item.id] = item.quantity.toString();
+      inputs[item.product.product_id] = item.quantity.toString();
     });
     setQuantityInputs(inputs);
   }, [cartItems]);
 
-  const handleQuantityUpdate = (cartItemId, value) => {
+  const handleQuantityUpdate = (productId, value) => {
     let newVal = value;
     if (!newVal || parseInt(newVal, 10) < 1) {
       newVal = "1";
     }
     setQuantityInputs({
       ...quantityInputs,
-      [cartItemId]: newVal,
+      [productId]: newVal,
     });
-    updateQuantity(cartItemId, parseInt(newVal, 10));
+    updateQuantity(productId, parseInt(newVal, 10));
   };
 
   const totalPrice = cartItems.reduce(
@@ -40,13 +39,14 @@ function Cart() {
       ) : (
         <div className={styles.cartItems}>
           {cartItems.map((item) => {
+            const productId = item.product.product_id;
             const inputValue =
-              quantityInputs[item.id] !== undefined
-                ? quantityInputs[item.id]
+              quantityInputs[productId] !== undefined
+                ? quantityInputs[productId]
                 : item.quantity.toString();
 
             return (
-              <div key={item.id} className={styles.cartItem}>
+              <div key={productId} className={styles.cartItem}>
                 <img
                   src="https://via.placeholder.com/150"
                   alt={item.product.name}
@@ -55,24 +55,24 @@ function Cart() {
                 <div className={styles.itemInfo}>
                   <h3 className={styles.itemTitle}>{item.product.name}</h3>
                   <div className={styles.quantityContainer}>
-                    <label htmlFor={`quantity-${item.id}`}>Quantity: </label>
+                    <label htmlFor={`quantity-${productId}`}>Quantity: </label>
                     <input
-                      id={`quantity-${item.id}`}
+                      id={`quantity-${productId}`}
                       type="number"
                       min="1"
                       value={inputValue}
                       onChange={(e) =>
                         setQuantityInputs({
                           ...quantityInputs,
-                          [item.id]: e.target.value,
+                          [productId]: e.target.value,
                         })
                       }
                       onBlur={(e) =>
-                        handleQuantityUpdate(item.id, e.target.value)
+                        handleQuantityUpdate(productId, e.target.value)
                       }
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          handleQuantityUpdate(item.id, e.target.value);
+                          handleQuantityUpdate(productId, e.target.value);
                           e.target.blur();
                         }
                       }}
@@ -87,7 +87,7 @@ function Cart() {
                   </p>
                   <button
                     className={styles.removeButton}
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => removeFromCart(productId)}
                   >
                     Remove from Cart
                   </button>
@@ -97,7 +97,7 @@ function Cart() {
           })}
           <div className={styles.cartTotal}>
             <h3>Total: ${totalPrice.toFixed(2)}</h3>
-            <button className={styles.checkoutButton}>Proceed to Checkout</button>
+            <button className={styles.checkoutButton}>Estimate Total</button>
           </div>
         </div>
       )}

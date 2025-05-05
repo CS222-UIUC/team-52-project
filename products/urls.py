@@ -5,10 +5,6 @@ from .views import (
     one_product,
     PriceHistoryView,
     create_price_alert,
-    add_to_cart,
-    remove_from_cart,
-    update_cart_quantity,
-    get_cart_items
 )
 
 urlpatterns = [
@@ -17,11 +13,7 @@ urlpatterns = [
     path('products/<str:product_id>/history/', PriceHistoryView.as_view(), name='product-history'),
     path('price-alerts/', create_price_alert, name='create-price-alert'),
 
-    # Cart Endpoints
-    path('cart/', get_cart_items, name='get-cart'),  # 🔥 this is the new line!
-    path('cart/add/', add_to_cart, name='add-to-cart'),
-    path('cart/remove/<int:pk>/', remove_from_cart, name='remove-from-cart'),
-    path('cart/update/<int:pk>/', update_cart_quantity, name='update-cart'),
+   
 ]
 
 
