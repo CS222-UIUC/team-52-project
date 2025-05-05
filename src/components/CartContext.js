@@ -7,7 +7,7 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   const sessionId = 'test-session-id'; // You can improve this later
-  const baseURL = 'http://localhost:8000'; // Update if needed
+  const baseURL = 'http://10.251.168.243:8000'; // Update if needed
 
   //  Load cart items on mount
   useEffect(() => {
@@ -26,12 +26,16 @@ export const CartProvider = ({ children }) => {
   //  Add item to cart
   const addToCart = async (productId, quantity = 1) => {
     try {
-      const response = await axios.post(`${baseURL}/api/cart/add/`, {
+      await axios.post(`${baseURL}/api/cart/add/`, {
         product_id: productId,
         quantity,
         session_id: sessionId,
       });
-      setCartItems(prev => [...prev, response.data]);
+  
+      // Refetch updated cart
+      const res = await axios.get(`${baseURL}/api/cart/?session_id=${sessionId}`);
+      setCartItems(res.data);
+  
       return { success: true };
     } catch (error) {
       console.error('Error adding to cart:', error);
