@@ -71,3 +71,9 @@
     width: 20px;
     height: 20px;
   }
+
+  .logo {
+    width: 40px;
+    height: auto;
+    margin-right: 10px;
+  }

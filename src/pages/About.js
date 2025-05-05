@@ -38,15 +38,26 @@ function About() {
       </section> */}
 
       <section className= "section bg-light border-bottom">
-        <div className = "container">
-          <div>
-          <h5 className = "main-heading">Our Mission</h5>
-          <div className = 'underline'></div>
-          <p>
+      <div className = "container">
+      <div>
+        <h5 className = "main-heading">Our Mission</h5>
+        <div className = 'underline'></div>
+        <p>
           Grocery Gauge helps shoppers track grocery price inflation and find the best deals across different stores. Our goal is to make budgeting easier by providing real-time price comparisons and historical trends.
-          </p>
-          </div>
-        </div>
+        </p>
+      </div>
+
+      <div className="about_img">
+      <img 
+        src="/images/istockphoto-1215072566-612x612.jpg" 
+        alt="Team working on Grocery Gauge" 
+      />
+      <img 
+        src="/images/360_F_506184891_GDL7vlfqeBRSALShhxF6wx43lG7r54Mo.jpg" 
+        alt="Team working on Grocery Gauge" 
+      />
+    </div>
+    </div>
       </section>
 
       <section className="section">
