@@ -1,7 +1,7 @@
-<<<<<<< HEAD
-#Introduction
 
-##What is Grocery Gauge? 
+# Introduction
+
+## What is Grocery Gauge? 
 This website is a tool for people to track inflation prices on grocery products, more specifically Kroger products
 1. Pulls data from Kroger ____??
 2. Website gets this data from the products and uses ____ to predict the price for the upcoming ___ days
