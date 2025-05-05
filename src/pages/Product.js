@@ -98,12 +98,9 @@ const Product = () => {
       console.log("Product object:", x);
       console.log("Product ID:", x.product_id);
 
-      const success = await addToCart(x.product_id, parseInt(quantity, 10) || 1);
-      if (success) {
-        setClose(false);
-      } else {
-        alert("Failed to add to cart!");
-      }
+      addToCart(x, parseInt(quantity, 10) || 1);
+alert("Added to cart!");
+setClose(false);
     } catch (err) {
       console.error("Error adding to cart:", err);
       alert("An error occurred.");
