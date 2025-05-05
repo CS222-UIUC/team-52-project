@@ -29,18 +29,23 @@ const Product = () => {
   const totalPages = Math.ceil(products.length / productsPerPage);
 
   const detailPage = async (product) => {
+    console.log("Fetching graph for product ID:", product.id || product.product_id);
     setDetail([{ ...product, graph: null }]);
     setClose(true);
     setQuantity("1");
     setLoadingGraph(true);
 
     try {
-      const res = await fetch(`http://localhost:5000/generate-plot?product_id=${product.id}`);
+      const res = await fetch(`http://localhost:5001/generate-plot?product_id=${product.id}`);
       const data = await res.json();
+      console.log("Received plot data:", data);
 
       if (data.image) {
         const imageUrl = `data:image/png;base64,${data.image}`;
+        console.log("Setting image URL:", imageUrl.slice(0, 100));
         setDetail([{ ...product, graph: imageUrl }]);
+      } else {
+        console.warn("No image returned for product.");
       }
     } catch (err) {
       console.error("Error fetching price graph:", err);
@@ -60,7 +65,7 @@ const Product = () => {
             {detail.map((x) => (
               <div key={x.id} className="detail_info">
                 <div className="img-box">
-                  <img src="https://via.placeholder.com/200" alt={x.name} />
+                <img src="https://placehold.co/200x200?text=Image" alt={x.name} />
                 </div>
                 <div className="product_detail">
                   <h2>{x.name}</h2>

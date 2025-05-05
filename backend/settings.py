@@ -39,6 +39,7 @@ ALLOWED_HOSTS = [
     '10.251.166.215',
     '10.251.130.49',
     '10.251.168.184',
+    'localhost',
 ]
 
 SENDGRID_API_KEY = "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"
@@ -60,7 +61,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'products',
     'django_celery_beat',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [

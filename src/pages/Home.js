@@ -10,6 +10,7 @@ console.log("TopBar CSS imported");
 export function TopBar({ searchQuery, setSearchQuery }) {
    // const [searchQuery, setSearchQuery] = useState(""); // State for storing the search input value
    // const [activeTab, setActiveTab] = useState("Home"); // State for keeping track of the active tab
+   // eslint-disable-next-line COMMENT: WE ADDED THIS LINE AS A COMMENT SO YL CAN RUN FRONT AND BACKEND
     const [activeTab, setActiveTab] = useState("Home");
 
     const location = useLocation(); //izzie added
