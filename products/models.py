@@ -31,3 +31,4 @@ class PriceAlert(models.Model):
     def __str__(self):
         return f"Alert for {self.product.name} under ${self.target_price}"
     
+   

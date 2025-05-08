@@ -51,7 +51,7 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders',  # <- Adeded - jen
+    #'corsheaders',  # <- Adeded - jen
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

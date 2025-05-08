@@ -46,3 +46,11 @@ class PriceHistoryView(APIView):
         serializer = PriceHistorySerializer(histories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+    ##jen added for add to cart functionality using endpoint
+#@api_view(["POST"])
+#def add_to_cart(request):
+ #   serializer = CartItemSerializer(data=request.data)
+  #  if serializer.is_valid():
+   #     serializer.save()
+    #    return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

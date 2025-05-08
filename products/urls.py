@@ -12,6 +12,8 @@ urlpatterns = [
     path('products/<str:product_id>/', one_product, name='one-product'),
     path('products/<str:product_id>/history/', PriceHistoryView.as_view(), name='product-history'),
     path('price-alerts/', create_price_alert, name='create-price-alert'),
+
+   
 ]
 
 
