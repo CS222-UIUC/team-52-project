@@ -57,14 +57,35 @@ def update_kroger_prices():
     """Runs every interval to refresh price & history for existing Products."""
     now = timezone.now()
     for prod in Product.objects.all():
+        # 1) fetch current data
         item = search_kroger_products(prod.product_id)
         if not item:
+            # no data back? skip or delete:
             continue
-        price = item["items"][0]["price"]["regular"]
+
+        # 2) extract the price safely
+        price = (
+            item
+            .get("items", [{}])[0]
+            .get("price", {})
+            .get("regular")
+        )
+        if price is None:
+            # no price → drop the product (optional)
+            prod.delete()
+            continue
+
+        # 3) always update the product row
         prod.current_price = price
-        prod.last_updated = now
-        prod.save()
-        PriceHistory.objects.create(product=prod, price=price, timestamp=now)
+        prod.last_updated  = now
+        prod.save(update_fields=['current_price','last_updated'])
+
+        # 4) always record a history row
+        PriceHistory.objects.create(
+            product=prod,
+            price=price,
+            timestamp=now
+        )
 
 @shared_task
 def check_price_alerts():
