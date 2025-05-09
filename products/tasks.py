@@ -3,89 +3,96 @@ from django.conf import settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from .models import PriceAlert, Product, PriceHistory
-from celery import shared_task
-from .utils import search_kroger_products
+from .utils import search_kroger_products, get_kroger_access_token
 from django.utils import timezone
 import requests
 from .utils import get_kroger_access_token
-# from .utils import fetch_price_for_product  # you’d write this
+import logging
+from django.db import IntegrityError
+
+logger = logging.getLogger(__name__)
 
 @shared_task
 def seed_kroger_products():
-    """Run once to grab 9 items, one per keyword."""
-    keywords = ["bread","eggs","fruit","dairy","meat","veggies","oil","sriracha","cereal"]
+    """Run once to grab 5 items per category and prune all others."""
+    categories = ["bread", "eggs", "fruits", "dairy", "meat", "vegetables"]
     kept_ids = []
     token = get_kroger_access_token()
-    for kw in keywords:
-        # term search, exactly the same as your original helper
-        url = "https://api.kroger.com/v1/products"
+
+    for cat in categories:
+        url     = "https://api.kroger.com/v1/products"
         headers = {"Authorization": f"Bearer {token}"}
-        params = {
-            "filter.term":       kw,
+        params  = {
+            "filter.term":       cat,
             "filter.locationId": "01400943",
-            "limit":             1,
+            "filter.limit":       5,
         }
         resp = requests.get(url, headers=headers, params=params)
         resp.raise_for_status()
-        data = resp.json().get("data", [])
-        if not data:
-            continue
-        item = data[0]
-        pid   = item["productId"]
-        name  = item.get("description","")
-        brand = item.get("brand","")
-        upc   = item.get("upc")
-        price = item.get("items",[{}])[0].get("price",{}).get("regular",0.0)
-        # upsert that product
-        Product.objects.update_or_create(
-            product_id=pid,
-            defaults={
-                "name":          name,
-                "brand":         brand,
-                "upc":           upc,
-                "current_price": price,
-                "last_updated":  timezone.now(),
-            }
-        )
-        kept_ids.append(pid)
 
-    # delete everything _except_ our nine
+        for item in resp.json().get("data", []):
+            pid   = item["productId"]
+            price = item.get("items", [{}])[0] \
+                        .get("price", {}) \
+                        .get("regular")
+
+            # skip any with no price or zero, so they never get seeded
+            if price is None or price == 0:
+                logger.warning(f"Seed skipped {pid}: price is {price!r}")
+                continue
+
+            Product.objects.update_or_create(
+                product_id=pid,
+                defaults={
+                    "name":          item.get("description", ""),
+                    "brand":         item.get("brand", ""),
+                    "upc":           item.get("upc"),
+                    "current_price": price,
+                    "last_updated":  timezone.now(),
+                    "image_url":     f"https://www.kroger.com/product/images/xlarge/front/{pid}",
+                }
+            )
+            kept_ids.append(pid)
+
+    # remove any product not in our selected 30
     Product.objects.exclude(product_id__in=kept_ids).delete()
+
 
 @shared_task
 def update_kroger_prices():
     """Runs every interval to refresh price & history for existing Products."""
     now = timezone.now()
+
     for prod in Product.objects.all():
-        # 1) fetch current data
         item = search_kroger_products(prod.product_id)
         if not item:
-            # no data back? skip or delete:
-            continue
+            continue  # no data at all
 
-        # 2) extract the price safely
-        price = (
-            item
-            .get("items", [{}])[0]
-            .get("price", {})
-            .get("regular")
-        )
-        if price is None:
-            # no price → drop the product (optional)
+        price = item.get("items", [{}])[0] \
+                    .get("price", {}) \
+                    .get("regular")
+
+        # skip & delete if missing or zero
+        if price is None or price == 0:
+            logger.warning(f"Update skipped {prod.product_id}: price is {price!r}; deleting product.")
             prod.delete()
             continue
 
-        # 3) always update the product row
-        prod.current_price = price
-        prod.last_updated  = now
-        prod.save(update_fields=['current_price','last_updated'])
-
-        # 4) always record a history row
-        PriceHistory.objects.create(
-            product=prod,
-            price=price,
-            timestamp=now
+        # update the product row
+        Product.objects.filter(pk=prod.pk).update(
+            current_price=price,
+            last_updated=now
         )
+
+        # record history, but guard against FK races
+        try:
+            PriceHistory.objects.create(
+                product=prod,
+                price=price,
+                timestamp=now
+            )
+        except IntegrityError as e:
+            logger.warning(f"Could not create PriceHistory for {prod.product_id}: {e}")
 
 @shared_task
 def check_price_alerts():
