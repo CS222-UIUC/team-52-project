@@ -20,7 +20,7 @@ function App() {
         <div className="content-wrapper">
           <Routes>
           <Route path="/" element={<Home searchQuery={searchQuery} setSearchQuery={setSearchQuery} />} />
-            <Route path="/browse" element={<Product />} />
+          <Route path="/browse" element={<Product searchQuery={searchQuery} />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/about" element={<About />} />
           </Routes>
