@@ -40,7 +40,9 @@ ALLOWED_HOSTS = [
     '10.251.130.49',
     '10.251.168.184',
     'localhost',
-    '10.251.173.12'
+    '10.251.173.12',
+    '10.251.134.171',
+    '10.251.165.47',
 ]
 
 SENDGRID_API_KEY = "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"
