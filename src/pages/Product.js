@@ -3,7 +3,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import '../components/style.css';
 import { CartContext } from '../components/CartContext';
 
-const Product = () => {
+const Product = ({searchQuery}) => {
   const [products, setProducts] = useState([]);
   const [detail, setDetail] = useState([]);
   const [close, setClose] = useState(false);
@@ -19,14 +19,19 @@ const Product = () => {
       .catch(err => console.error("Error fetching products:", err));
   }, []);
 
+  
+
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
-
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
   const detailPage = async (product) => {
     console.log("Fetching graph for product ID:", product.id || product.product_id);
@@ -65,7 +70,16 @@ const Product = () => {
             {detail.map((x) => (
               <div key={x.id} className="detail_info">
                 <div className="img-box">
-                <img src="https://placehold.co/200x200?text=Image" alt={x.name} />
+                <img
+                  src={x.image_url || "https://via.placeholder.com/200x200?text=No+Image"}
+                  alt={x.name}
+                  style={{
+                    width: '200px',
+                    height: '200px',
+                    objectFit: 'cover',
+                    borderRadius: '8px'
+                  }}
+                />
                 </div>
                 <div className="product_detail">
                   <h2>{x.name}</h2>
@@ -122,6 +136,12 @@ setClose(false);
           </div>
         </div>
       )}
+
+{searchQuery && (
+  <h2 style={{ textAlign: 'center', marginTop: '20px' }}>
+    Search Results
+  </h2>
+)}
 
       <div className="container">
       {currentProducts.map((curElm) => (
