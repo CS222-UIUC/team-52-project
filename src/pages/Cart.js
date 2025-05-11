@@ -48,10 +48,10 @@ function Cart() {
             return (
               <div key={productId} className={styles.cartItem}>
                 <img
-  src={item.product.image_url || "https://via.placeholder.com/150?text=No+Image"}
-  alt={item.product.name}
-  className={styles.itemImage}
-/>
+                  src="https://via.placeholder.com/150"
+                  alt={item.product.name}
+                  className={styles.itemImage}
+                />
                 <div className={styles.itemInfo}>
                   <h3 className={styles.itemTitle}>{item.product.name}</h3>
                   <div className={styles.quantityContainer}>
