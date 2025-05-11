@@ -3,7 +3,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import '../components/style.css';
 import { CartContext } from '../components/CartContext';
 
-const Product = ({searchQuery}) => {
+const Product = ({searchQuery, setSearchQuery}) => {
   const [products, setProducts] = useState([]);
   const [detail, setDetail] = useState([]);
   const [close, setClose] = useState(false);
@@ -19,38 +19,34 @@ const Product = ({searchQuery}) => {
       .catch(err => console.error("Error fetching products:", err));
   }, []);
 
-  
+const [currentPage, setCurrentPage] = useState(1);
+const productsPerPage = 12;
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 12;
+// Filter first
+const filteredProducts = products.filter(product =>
+  product.name.toLowerCase().includes(searchQuery.toLowerCase())
+);
 
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+// Then paginate
+const indexOfLastProduct = currentPage * productsPerPage;
+const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
 
   const detailPage = async (product) => {
-    console.log("Fetching graph for product ID:", product.id || product.product_id);
     setDetail([{ ...product, graph: null }]);
     setClose(true);
     setQuantity("1");
     setLoadingGraph(true);
 
     try {
-      const res = await fetch(`http://localhost:5001/generate-plot?product_id=${product.id}`);
+      const res = await fetch(`http://localhost:5000/generate-plot?product_id=${product.id}`);
       const data = await res.json();
-      console.log("Received plot data:", data);
 
       if (data.image) {
         const imageUrl = `data:image/png;base64,${data.image}`;
-        console.log("Setting image URL:", imageUrl.slice(0, 100));
         setDetail([{ ...product, graph: imageUrl }]);
-      } else {
-        console.warn("No image returned for product.");
       }
     } catch (err) {
       console.error("Error fetching price graph:", err);
@@ -70,16 +66,7 @@ const Product = ({searchQuery}) => {
             {detail.map((x) => (
               <div key={x.id} className="detail_info">
                 <div className="img-box">
-                <img
-                  src={x.image_url || "https://via.placeholder.com/200x200?text=No+Image"}
-                  alt={x.name}
-                  style={{
-                    width: '200px',
-                    height: '200px',
-                    objectFit: 'cover',
-                    borderRadius: '8px'
-                  }}
-                />
+                  <img src="https://via.placeholder.com/200" alt={x.name} />
                 </div>
                 <div className="product_detail">
                   <h2>{x.name}</h2>
@@ -136,12 +123,6 @@ setClose(false);
           </div>
         </div>
       )}
-
-{searchQuery && (
-  <h2 style={{ textAlign: 'center', marginTop: '20px' }}>
-    Search Results
-  </h2>
-)}
 
       <div className="container">
       {currentProducts.map((curElm) => (

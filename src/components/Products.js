@@ -6,7 +6,7 @@ const Products = () => {
 
   useEffect(() => {
     //need to change the URL to your backend URL - jen 
-  fetch("http://10.251.168.243:8000/api/products/")
+  fetch("http://10.251.173.127:8000/api/products/")
     .then(res => res.json())
     .then(data => setProducts(data))
     .catch(err => console.error("Error fetching products:", err));
