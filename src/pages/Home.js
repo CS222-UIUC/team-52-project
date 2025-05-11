@@ -43,7 +43,7 @@ export function TopBar({ searchQuery, setSearchQuery }) {
         {/* Left section (logo + title) */}
         <div className={styles.leftSection}>  
         <img 
-            src="/images/Untitled_Artwork.webp" 
+            src="/images/OIP.jpg" 
             alt="GroceryGauge Logo" 
             className={styles.logo}
             />
@@ -122,6 +122,11 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
     const [detail, setDetail] = useState([]);
     const [close, setClose] = useState(false);
     const [products, setProducts] = useState([]);
+    //jen added price alert
+    const [alertEmail, setAlertEmail] = useState("");
+    const [targetPrice, setTargetPrice] = useState("");
+    const [showAlertForm, setShowAlertForm] = useState(false);
+    const [alertProductId, setAlertProductId] = useState(null);
 
 
     const detailPage = async (product) => {
@@ -154,7 +159,7 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
         .then((res) => res.json())
         .then((data) => {
             setProducts(data);
-            const popularIds = [19, 90, 4006, 110];
+            const popularIds = [19, 90, 4006, 110, 7843, 7858, 7845, 7837];
             const filtered = data.filter(product => popularIds.includes(product.id));
             setPopularProducts(filtered);
           })
@@ -186,7 +191,6 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
             transition: 'transform 0.3s ease'
         }
     };
-
     return (
         <div style={{
             //display: 'flex',
@@ -194,297 +198,331 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
             //alignItems: 'center',
            // justifyContent: 'center',
             minHeight: '60vh',  // Adjust based on your needs
-            textAlign: 'center',
-            padding: '2rem',
-            background: 'linear-gradient(to bottom, #f8f9fa, #ffffff)'
+          textAlign: 'center',
+          padding: '2rem',
+          background: 'linear-gradient(to bottom, #f8f9fa, #ffffff)'
         }}>
-            {/* Welcome Header */}
+          {/* Welcome Header */}
             <div style={{
                 maxWidth: '800px',
                 margin: '0 auto'
             }}>
-                <h1 style={{
-                    fontSize: '2.5rem',
-                    fontWeight: '700',
-                    color: '#2c3e50',
+            <h1 style={{
+              fontSize: '2.5rem',
+              fontWeight: '700',
+              color: '#2c3e50',
                     marginBottom: '1.5rem',
                     lineHeight: '1.3'
-                }}>
-                    Welcome to GroceryGauge
-                </h1>
+            }}>
+              Welcome to GroceryGauge
+            </h1>
                 
-                <p style={{
-                    fontSize: '1.25rem',
-                    color: '#7f8c8d',
+            <p style={{
+              fontSize: '1.25rem',
+              color: '#7f8c8d',
                     marginBottom: '2.5rem',
                     lineHeight: '1.6'
-                }}>
-                    Track Grocery Inflation Prices and Find The Best Deals For You!
-                </p>
+            }}>
+              Track Grocery Inflation Prices and Find The Best Deals For You!
+            </p>
                 
                 {/* Search/Call-to-Action Section */}
-                <div style={{
-                    display: 'flex',
-                    gap: '1rem',
-                    justifyContent: 'center',
-                    flexWrap: 'wrap'
-                }}>
-                    <input
-                        type="text"
-                        placeholder="Search for products"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        style={{
-                            padding: '0.8rem 1.2rem',
-                            borderRadius: '50px',
-                            border: '1px solid #ddd',
-                            minWidth: '300px',
+            <div style={{
+              display: 'flex',
+              gap: '1rem',
+              justifyContent: 'center',
+              flexWrap: 'wrap'
+            }}>
+              <input
+                type="text"
+                placeholder="Search for products"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  padding: '0.8rem 1.2rem',
+                  borderRadius: '50px',
+                  border: '1px solid #ddd',
+                  minWidth: '300px',
                             fontSize: '1rem',
                             outline: 'none',
                             boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
-                        }}
-                    />
-                    <button style={{
-                        padding: '0.8rem 2rem',
-                        borderRadius: '50px',
-                        border: 'none',
-                        background: 'rgb(138, 187, 99)',
-                        color: 'white',
-                        fontWeight: '600',
+                }}
+              />
+              <button style={{
+                padding: '0.8rem 2rem',
+                borderRadius: '50px',
+                border: 'none',
+                background: 'rgb(138, 187, 99)',
+                color: 'white',
+                fontWeight: '600',
                         cursor: 'pointer',
                         fontSize: '1rem',
                         transition: 'all 0.3s ease'
-                    }}>
-                        <Link to="/browse" style={{ color: 'white', textDecoration: 'none' }}>
-                        Explore Products
-                        </Link>
-                    </button>
-                </div>
+              }}>
+                <Link to="/browse" style={{ color: 'white', textDecoration: 'none' }}>
+                  Explore Products
+                </Link>
+              </button>
             </div>
-            
-            {!searchQuery && (
-  <>  
-            {/* Product Grid */}
-            <h2 className={styles.title} style={{ margin: '20px 0 10px' }}>Popular Picks</h2>
-
-<div style={homeStyles.productGrid}>
-  {popularProducts.map((product) => (
-    <div 
-    key={product.id}
-    style={{
-      border: '1px solid #eee',
-      borderRadius: '8px',
-      padding: '15px',
-      height: '420px',  // <-- fix total height
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      boxSizing: 'border-box'
-    }}
-  >
-    {/* Product Image */}
-    <div style={{ height: '180px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <img 
-        src={product.image_url || "https://thaka.bing.com/th/id/OIP.RCFyflqWgpQq07U0Tm3IQQHaHw?rs=1&pid=ImgDetMain"}
-        alt={product.name}
-        style={{
-          maxHeight: '100%',
-          maxWidth: '100%',
-          objectFit: 'contain', // <<-- 🔥 very important
-          borderRadius: '5px'
-        }}
-      />
-    </div>
-  
-    {/* Product Name */}
-    <div style={{ 
-      minHeight: '70px', 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      textAlign: 'center',
-      padding: '5px'
-    }}>
-      <h3 style={{ margin: '0', fontSize: '1.2rem', color: '#2c3e50' }}>
-        {product.name}
-      </h3>
-    </div>
-  
-    {/* Price */}
-    <p style={{ color: 'rgb(138, 187, 99)', fontWeight: 'bold', margin: '10px 0' }}>
-      ${product.current_price}
-    </p>
-  
-    {/* View Details Button */}
-    <button 
-      onClick={() => detailPage(product)}
-      style={{
-        background: 'rgb(138, 187, 99)',
-        color: 'white',
-        border: 'none',
-        padding: '10px 20px',
-        borderRadius: '4px',
-        cursor: 'pointer',
-        width: '100%'
-      }}
-    >
-      View Details
-    </button>
-  </div>  
-  ))}
-</div>
-</>
-)}
-{searchQuery && (
-  <>
-    <h2 className={styles.title} style={{ margin: '20px 0 10px' }}>Search Results</h2>
-    <div style={homeStyles.productGrid}>
-      {filteredProducts.length > 0 ? (
-        filteredProducts.map((product) => (
-            <div 
-            key={product.id}
-            style={{
-              border: '1px solid #eee',
-              borderRadius: '8px',
-              padding: '15px',
-              height: '420px',  // <-- fix total height
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              boxSizing: 'border-box'
-            }}
-          >
-            {/* Product Image */}
-            <div style={{ height: '180px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <img 
-                src={product.image_url || "https://thaka.bing.com/th/id/OIP.RCFyflqWgpQq07U0Tm3IQQHaHw?rs=1&pid=ImgDetMain"}
-                alt={product.name}
-                style={{
-                  maxHeight: '100%',
-                  maxWidth: '100%',
-                  objectFit: 'contain', // <<-- 🔥 very important
-                  borderRadius: '5px'
-                }}
-              />
-            </div>
-          
-            {/* Product Name */}
-            <div style={{ 
-              minHeight: '70px', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              textAlign: 'center',
-              padding: '5px'
-            }}>
-              <h3 style={{ margin: '0', fontSize: '1.2rem', color: '#2c3e50' }}>
-                {product.name}
-              </h3>
-            </div>
-          
-            {/* Price */}
-            <p style={{ color: 'rgb(138, 187, 99)', fontWeight: 'bold', margin: '10px 0' }}>
-              ${product.current_price}
-            </p>
-          
-            {/* View Details Button */}
-            <button 
-              onClick={() => detailPage(product)}
-              style={{
-                background: 'rgb(138, 187, 99)',
-                color: 'white',
-                border: 'none',
-                padding: '10px 20px',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                width: '100%'
-              }}
-            >
-              View Details
-            </button>
-          </div>  
-        ))
-      ) : (
-        <p>No results found.</p>
-      )}
-    </div>
-  </>
-)}
-
-
-            {/* Detail Modal */}
-            {close && (
-                <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'rgba(0,0,0,0.5)',
+          </div>
+      
+          {/* Conditional Rendering */}
+          {!searchQuery && (
+            <>
+              <h2 className={styles.title} style={{ margin: '20px 0 10px' }}>Popular Picks</h2>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+                gap: '20px',
+                marginTop: '30px'
+              }}>
+                {popularProducts.map((product) => (
+                  <div key={product.id} style={{
+                    border: '1px solid #eee',
+                    borderRadius: '8px',
+                    padding: '15px',
+                    height: '420px',
                     display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    zIndex: 1000
-                }}>
-                    <div style={{
-                        background: 'white',
-                        padding: '20px',
-                        borderRadius: '8px',
-                        maxWidth: '600px',
-                        position: 'relative'
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <div style={{ height: '180px', display: 'flex', justifyContent: 'center' }}>
+                      <img
+        src={product.image_url || "https://thaka.bing.com/th/id/OIP.RCFyflqWgpQq07U0Tm3IQQHaHw?rs=1&pid=ImgDetMain"}
+                        alt={product.name}
+                        style={{
+                          maxHeight: '100%',
+                          maxWidth: '100%',
+          objectFit: 'contain', // <<-- 🔥 very important
+                          borderRadius: '5px'
+                        }}
+                      />
+                    </div>
+                    <h3 style={{ fontSize: '1.2rem', color: '#2c3e50' }}>{product.name}</h3>
+                    <p style={{ color: 'rgb(138, 187, 99)', fontWeight: 'bold' }}>${product.current_price}</p>
+                    <button onClick={() => detailPage(product)} style={{
+                      background: 'rgb(138, 187, 99)',
+                      color: 'white',
+                      border: 'none',
+                      padding: '10px',
+                      borderRadius: '4px',
+                      width: '100%',
+                      marginBottom: '5px'
                     }}>
-                        <button 
-                            onClick={() => setClose(false)}
-                            style={{
-                                position: 'absolute',
-                                top: '10px',
-                                right: '10px',
-                                background: 'none',
-                                border: 'none',
-                                fontSize: '24px',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            <AiFillCloseCircle />
-                        </button>
-                        {detail.map((item) => (
-                            <div key={item.id} style={{ display: 'flex', gap: '20px' }}>
+                      View Details
+                    </button>
+                    <button onClick={() => {
+                      console.log("Alert product_id:", product.product_id);
+                      setAlertProductId(product.product_id);
+                      setShowAlertForm(true);
+                    }} style={{
+                      background: '#fff',
+                      color: 'rgb(138, 187, 99)',
+                      border: '1px solid rgb(138, 187, 99)',
+                      padding: '8px',
+                      borderRadius: '4px',
+                      width: '100%'
+                    }}>
+                      Set Price Alert
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+      
+          {searchQuery && (
+            <>
+              <h2 className={styles.title} style={{ margin: '20px 0 10px' }}>Search Results</h2>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+                gap: '20px',
+                marginTop: '30px'
+              }}>
+                {filteredProducts.length > 0 ? (
+                  filteredProducts.map((product) => (
+                    <div key={product.id} style={{
+                      border: '1px solid #eee',
+                      borderRadius: '8px',
+                      padding: '15px',
+                      height: '420px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      alignItems: 'center'
+                    }}>
+                      <div style={{ height: '180px', display: 'flex', justifyContent: 'center' }}>
+                        <img
+                          src={product.image_url || "https://via.placeholder.com/150"}
+                          alt={product.name}
+                          style={{
+                            maxHeight: '100%',
+                            maxWidth: '100%',
+                            objectFit: 'contain',
+                            borderRadius: '5px'
+                          }}
+                        />
+                      </div>
+                      <h3 style={{ fontSize: '1.2rem', color: '#2c3e50' }}>{product.name}</h3>
+                      <p style={{ color: 'rgb(138, 187, 99)', fontWeight: 'bold' }}>${product.current_price}</p>
+                      <button onClick={() => detailPage(product)} style={{
+                        background: 'rgb(138, 187, 99)',
+                        color: 'white',
+                        border: 'none',
+                        padding: '10px',
+                        borderRadius: '4px',
+                        width: '100%'
+                      }}>
+                        View Details
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <p>No results found.</p>
+                )}
+              </div>
+            </>
+          )}
+      
+          {/* Detail Modal */}
+          {close && !showAlertForm && (
+            <div style={{
+              position: 'fixed',
+              top: 0, left: 0, right: 0, bottom: 0,
+              background: 'rgba(0,0,0,0.5)',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              zIndex: 1000
+            }}>
+              <div style={{
+                background: 'white',
+                padding: '20px',
+                borderRadius: '8px',
+                maxWidth: '600px',
+                position: 'relative'
+              }}>
+                <button onClick={() => setClose(false)} style={{
+                  position: 'absolute',
+                  top: '10px', right: '10px',
+                  fontSize: '24px',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}>
+                  <AiFillCloseCircle />
+                </button>
+                {detail.map((item) => (
+                  <div key={item.id} style={{ display: 'flex', gap: '20px' }}>
                                 <img 
-                                    src={item.image_url || "https://via.placeholder.com/150?text=No+Image"} 
+                                    src={item.img} 
                                     alt={item.Title}
                                     style={{
-                                        width: '200px',
-                                        height: '200px',
-                                        objectFit: 'cover',
-                                        borderRadius: '8px'
-                                    }}
-                                />
-                                <div>
-                                    <h2 className={styles.title}>{item.Title}</h2>
-                                    <p style={{ 
-                                        color: 'rgb(138, 187, 99)', 
-                                        fontSize: '1.2rem',
-                                        fontWeight: 'bold'
-                                    }}>
-                                        ${item.current_price}
-                                    </p>
-                                    {item.graph ? (
-                                        <img 
-                                            src={item.graph} 
-                                            alt="Price trend" 
-                                            style={{ marginTop: '15px', maxWidth: '100%' }}
-                                        />
-                                    ) : (
-                                        <p style={{ marginTop: '15px', color: '#999' }}>No price graph available.</p>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
+                      width: '200px',
+                      height: '200px',
+                      objectFit: 'cover',
+                      borderRadius: '8px'
+                    }} />
+                    <div>
+                      <h2 className={styles.title}>{item.name}</h2>
+                      <p style={{ color: 'rgb(138, 187, 99)', fontWeight: 'bold' }}>${item.current_price}</p>
+                      {item.graph ? (
+                        <img src={item.graph} alt="Price trend" style={{ marginTop: '15px', maxWidth: '100%' }} />
+                      ) : (
+                        <p style={{ marginTop: '15px', color: '#999' }}>No price graph available.</p>
+                      )}
                     </div>
-                </div>
-            )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+      
+          {/* Price Alert Modal */}
+          {showAlertForm && (
+            <div style={{
+              position: 'fixed',
+              top: 0, left: 0, right: 0, bottom: 0,
+              background: 'rgba(0,0,0,0.5)',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              zIndex: 1000
+            }}>
+              <div style={{
+                background: 'white',
+                padding: '20px',
+                borderRadius: '8px',
+                maxWidth: '400px',
+                width: '100%',
+                position: 'relative'
+              }}>
+                <button onClick={() => setShowAlertForm(false)} style={{
+                  position: 'absolute',
+                  top: '10px',
+                  right: '10px',
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '24px',
+                  cursor: 'pointer'
+                }}>
+                  <AiFillCloseCircle />
+                </button>
+                <h3>Set Price Alert</h3>
+                <input
+                  type="email"
+                  placeholder="Your email"
+                  value={alertEmail}
+                  onChange={(e) => setAlertEmail(e.target.value)}
+                  style={{ width: '100%', marginBottom: '10px', padding: '8px' }}
+                />
+                <input
+                  type="number"
+                  placeholder="Target price"
+                  value={targetPrice}
+                  onChange={(e) => setTargetPrice(e.target.value)}
+                  style={{ width: '100%', marginBottom: '10px', padding: '8px' }}
+                />
+                <button onClick={async () => {
+                  try {
+                    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/price-alerts/`, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({
+                        email: alertEmail,
+                        target_price: parseFloat(targetPrice),
+                        product_id: alertProductId
+                      })
+                    });
+                    if (response.ok) {
+                      alert("Price alert set!");
+                      setShowAlertForm(false);
+                      setAlertEmail("");
+                      setTargetPrice("");
+                    } else {
+                      alert("Failed to set alert.");
+                    }
+                  } catch (error) {
+                    console.error("Error:", error);
+                    alert("An error occurred.");
+                  }
+                }} style={{
+                  width: '100%',
+                  padding: '10px',
+                  background: 'rgb(138, 187, 99)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px'
+                }}>
+                  Submit Alert
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-    );
-};
+      );
+    };      
