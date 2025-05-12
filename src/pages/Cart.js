@@ -48,7 +48,7 @@ function Cart() {
             return (
               <div key={productId} className={styles.cartItem}>
                 <img
-                  src="https://via.placeholder.com/150"
+                  src={item.product.image_url || "https://via.placeholder.com/150"}
                   alt={item.product.name}
                   className={styles.itemImage}
                 />
