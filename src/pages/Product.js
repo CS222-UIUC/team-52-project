@@ -66,7 +66,7 @@ const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
             {detail.map((x) => (
               <div key={x.id} className="detail_info">
                 <div className="img-box">
-                  <img src="https://via.placeholder.com/200" alt={x.name} />
+                  <img src={x.image_url || "https://via.placeholder.com/200"} alt={x.name} />
                 </div>
                 <div className="product_detail">
                   <h2>{x.name}</h2>
