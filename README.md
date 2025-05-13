@@ -8,24 +8,33 @@ This website is a tool for people to track inflation prices on grocery products,
 3. Website simulates the current total price with an Add To Cart function that allows you to see the total price if you were to buy the products today
 4. Website provides notification emails so you can save certain products and get an email when your preferred target price is hit
 
+## Features
+- Browse Kroger grocery items with updated prices
+- View individual graphs for each product showcasing the change in price over time
+- Add/remove products from a simulated grocery cart to calculate the price of a grocery list
+- Search function to find specific products
+- Request an email alert for when desired products reach a desired price
+
 # Technical Architecture 
 [image]
 
 # Developers 
 - Jennifer Gonzalez (Frontend): Worked on Website Design and connecting backend API calls to Frontend design
-- Isabella Velez (Frontend): Mainly worked on Website Design, handled the Product and About Us pages.
+- Isabella Velez (Frontend): Mainly worked on Website Design, also handled the Product and About Us pages.
 - Andrew Stephan (Backend):
 - Yinglin (Backend):
 # Environment Setup
-......
-......
-......
+- git clone https://github.com/yourusername/grocery-gauge.git
+- cd grocery-gauge
+- npm install
+- npm run dev
+- (add stuff for running backend server)
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 # Development 
 ## Package Updates 
 ## To install packages, run the following:
-- npm install
+
 
 ## Package Management 
 pip install -r requirements.txt
@@ -33,3 +42,30 @@ pip install -r requirements.txt
 .........
 .........
 .........
+
+## Project Structure
+src/
+├── components/
+  ├── CartContext.js
+  ├── Footer.js
+  ├── Products.js
+  ├── style.css
+├── pages/   
+  ├── ~Pred_POC_Product.js
+  ├── About.js
+  ├── Cart.js
+  ├── Cart.module.css
+  ├── Home.js
+  ├── Home.module.css
+  ├── Product.js
+  ├── TopBar.module.css
+├── services/        
+├── assets/
+├── App.css
+├── App.js 
+├── App.test.js
+├── globalStyles.test.js
+├── index.css
+├── index.js
+├── reportWebVitals.js
+└── setupTests.js      
