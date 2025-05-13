@@ -22,26 +22,27 @@ This website is a tool for people to track inflation prices on grocery products,
 - Jennifer Gonzalez (Frontend): Worked on Website Design and connecting backend API calls to Frontend design
 - Isabella Velez (Frontend): Mainly worked on Website Design, also handled the Product and About Us pages.
 - Andrew Stephan (Backend):
-- Yinglin (Backend):
+- Yinglin (Backend): Set up the Django project environment and built functionality to fetch Kroger Products API data and stored it in a MySQL database
 # Environment Setup
-- git clone https://github.com/yourusername/grocery-gauge.git
-- cd grocery-gauge
-- npm install
-- npm run dev
-- (add stuff for running backend server)
+python3 -m venv .venv
+source .venv/bin/activate
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 # Development 
-## Package Updates 
-## To install packages, run the following:
-
-
-## Package Management 
+pip install --upgrade pip
 pip install -r requirements.txt
+## Package Updates 
+pip install pipreqs
+pipreqs . --force
+## Package Management 
+pip install --upgrade pip
+pip install -r requirements.txt
+npm install
 # Project Instructions 
-.........
-.........
-.........
+python runserver localhost:8000
+npm start
+cd backend/prediction
+python server.py
 
 ## Project Structure
 - src/
