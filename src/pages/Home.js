@@ -43,7 +43,7 @@ export function TopBar({ searchQuery, setSearchQuery }) {
         {/* Left section (logo + title) */}
         <div className={styles.leftSection}>  
         <img 
-            src="/images/OIP.jpg" 
+            src="/images/Untitled_Artwork.webp" 
             alt="GroceryGauge Logo" 
             className={styles.logo}
             />
@@ -138,7 +138,7 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
     
         //setLoadingGraph(true);
         try {
-        const res = await fetch(`http://localhost:5000/generate-plot?product_id=${product.id}`);
+        const res = await fetch(`http://localhost:5001/generate-plot?product_id=${product.id}`);
         const data = await res.json();
     
         if (data.image) {
@@ -289,7 +289,7 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
                   }}>
                     <div style={{ height: '180px', display: 'flex', justifyContent: 'center' }}>
                       <img
-        src={product.image_url || "https://thaka.bing.com/th/id/OIP.RCFyflqWgpQq07U0Tm3IQQHaHw?rs=1&pid=ImgDetMain"}
+             src={product.image_url || "https://thaka.bing.com/th/id/OIP.RCFyflqWgpQq07U0Tm3IQQHaHw?rs=1&pid=ImgDetMain"}
                         alt={product.name}
                         style={{
                           maxHeight: '100%',
@@ -416,15 +416,16 @@ export const Home = ({ searchQuery,setSearchQuery}) => {
                 </button>
                 {detail.map((item) => (
                   <div key={item.id} style={{ display: 'flex', gap: '20px' }}>
-                                <img 
-                                    src={item.img} 
-                                    alt={item.Title}
-                                    style={{
-                      width: '200px',
-                      height: '200px',
-                      objectFit: 'cover',
-                      borderRadius: '8px'
-                    }} />
+                                <img
+  src={item.image_url || "https://via.placeholder.com/150"}
+  alt={item.name}
+  style={{
+    width: '200px',
+    height: '200px',
+    objectFit: 'cover',
+    borderRadius: '8px'
+  }}
+/>
                     <div>
                       <h2 className={styles.title}>{item.name}</h2>
                       <p style={{ color: 'rgb(138, 187, 99)', fontWeight: 'bold' }}>${item.current_price}</p>
