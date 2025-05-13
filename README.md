@@ -1,4 +1,4 @@
-
+![image](https://github.com/user-attachments/assets/f2af8f6b-6e00-4bfe-b204-c3c76802eab9)![image](https://github.com/user-attachments/assets/bd8d2621-1d59-40a2-aa9a-e86e7df9a43d)![image](https://github.com/user-attachments/assets/8554f6dc-fdb0-4d0e-a01f-002c05be5f6f)
 # Introduction
 
 ## What is Grocery Gauge? 
@@ -70,3 +70,7 @@ pip install -r requirements.txt
 
 ## Website Screenshots
 ![Home Page](https://media.discordapp.net/attachments/1287663401283223555/1371687965562245171/Screenshot_2025-05-12_221002.png?ex=68240b77&is=6822b9f7&hm=4d1870e676750eb29b0f5503e8d99eb864519cd858a1eab06d307a86fb254be9&=&format=webp&quality=lossless&width=1423&height=813)
+![Product Page](https://media.discordapp.net/attachments/1287663401283223555/1371687965868294292/Screenshot_2025-05-12_221036.png?ex=68240b77&is=6822b9f7&hm=dc1e112301c63cb79a472c05a2d2935e5e3244c4c4d08e507383298f28600dc1&=&format=webp&quality=lossless&width=1420&height=813)
+![Cart Page](https://media.discordapp.net/attachments/1287663401283223555/1371687966296244225/Screenshot_2025-05-12_221112.png?ex=68240b77&is=6822b9f7&hm=385ae3145e7f549c242a231a6fe7a19c2634151ba71ce770e63245f1bf064cef&=&format=webp&quality=lossless&width=1414&height=813)
+![About Us Page](https://media.discordapp.net/attachments/1287663401283223555/1371687966619078790/Screenshot_2025-05-12_221139.png?ex=68240b77&is=6822b9f7&hm=15d0ca5fea80d580a75e16aecbc1c06fe4f11f31ce0f7ed2ae9009611c8df168&=&format=webp&quality=lossless&width=1410&height=813)
+
