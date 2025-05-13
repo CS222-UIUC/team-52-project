@@ -24,25 +24,25 @@ This website is a tool for people to track inflation prices on grocery products,
 - Andrew Stephan (Backend):
 - Yinglin (Backend): Set up the Django project environment and built functionality to fetch Kroger Products API data and stored it in a MySQL database
 # Environment Setup
-python3 -m venv .venv
-source .venv/bin/activate
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- python3 -m venv .venv
+- source .venv/bin/activate
+- Runs the app in the development mode.\
+- Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 # Development 
-pip install --upgrade pip
-pip install -r requirements.txt
+- pip install --upgrade pip
+- pip install -r requirements.txt
 ## Package Updates 
-pip install pipreqs
-pipreqs . --force
+- pip install pipreqs
+- pipreqs . --force
 ## Package Management 
-pip install --upgrade pip
-pip install -r requirements.txt
-npm install
+- pip install --upgrade pip
+- pip install -r requirements.txt
+- npm install
 # Project Instructions 
-python runserver localhost:8000
-npm start
-cd backend/prediction
-python server.py
+- python runserver localhost:8000
+- npm start
+- cd backend/prediction
+- python server.py
 
 ## Project Structure
 - src/
