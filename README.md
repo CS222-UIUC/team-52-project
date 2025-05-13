@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/f2af8f6b-6e00-4bfe-b204-c3c76802eab9)![image](https://github.com/user-attachments/assets/bd8d2621-1d59-40a2-aa9a-e86e7df9a43d)![image](https://github.com/user-attachments/assets/8554f6dc-fdb0-4d0e-a01f-002c05be5f6f)
+
 # Introduction
 
 ## What is Grocery Gauge? 
