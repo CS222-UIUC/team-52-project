@@ -41,7 +41,7 @@ const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
     setLoadingGraph(true);
 
     try {
-      const res = await fetch(`http://localhost:5000/generate-plot?product_id=${product.id}`);
+      const res = await fetch(`http://localhost:5001/generate-plot?product_id=${product.id}`);
       const data = await res.json();
 
       if (data.image) {

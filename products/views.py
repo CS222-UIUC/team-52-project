@@ -7,8 +7,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from .utils import search_kroger_products
-from .models import Product, PriceHistory, PriceAlert, CartItem
-from .serializers import ProductSerializer, PriceHistorySerializer, PriceAlertSerializer, CartItemSerializer
+from .models import Product, PriceHistory, PriceAlert
+from .serializers import ProductSerializer, PriceHistorySerializer, PriceAlertSerializer
 
 @api_view(["GET"])
 def all_products(request):

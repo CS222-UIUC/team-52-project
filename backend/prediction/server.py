@@ -29,7 +29,7 @@ def fetch_price_history(product_id):
     query = """
         SELECT price, timestamp
         FROM products_pricehistory
-        WHERE product_id = %s AND timestamp >= NOW() - INTERVAL 100 DAY
+        WHERE product_id = %s AND timestamp >= NOW() - INTERVAL 30 DAY
         ORDER BY timestamp ASC
     """
     cursor.execute(query, (product_id,))
