@@ -44,28 +44,29 @@ pip install -r requirements.txt
 .........
 
 ## Project Structure
-src/
-├── components/
-  ├── CartContext.js
-  ├── Footer.js
-  ├── Products.js
-  ├── style.css
-├── pages/   
-  ├── ~Pred_POC_Product.js
-  ├── About.js
-  ├── Cart.js
-  ├── Cart.module.css
-  ├── Home.js
-  ├── Home.module.css
-  ├── Product.js
-  ├── TopBar.module.css
-├── services/        
-├── assets/
-├── App.css
-├── App.js 
-├── App.test.js
-├── globalStyles.test.js
-├── index.css
-├── index.js
-├── reportWebVitals.js
-└── setupTests.js      
+- src/
+  - components/
+  - CartContext.js
+  - Footer.js
+  - Products.js
+  - style.css
+- pages/   
+  - ~Pred_POC_Product.js
+  - About.js
+  - Cart.js
+  - Cart.module.css
+  - Home.js
+  - Home.module.css
+  - Product.js
+  - TopBar.module.css
+- App.css
+- App.js 
+- App.test.js
+- globalStyles.test.js
+- index.css
+- index.js
+- reportWebVitals.js
+- setupTests.js
+
+## Website Screenshots
+![Home Page](https://media.discordapp.net/attachments/1287663401283223555/1371687965562245171/Screenshot_2025-05-12_221002.png?ex=68240b77&is=6822b9f7&hm=4d1870e676750eb29b0f5503e8d99eb864519cd858a1eab06d307a86fb254be9&=&format=webp&quality=lossless&width=1423&height=813)
