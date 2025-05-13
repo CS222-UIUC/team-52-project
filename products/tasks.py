@@ -108,7 +108,7 @@ def check_price_alerts():
                 html_content=(
                     f"<p>The price for <strong>{product.name}</strong> "
                     f"has dropped to <strong>${product.current_price:.2f}</strong>, "
-                    f"below your target of <strong>${alert.target_price:.2f}</strong>!</p>"
+                    f"which is your target or below your target of <strong>${alert.target_price:.2f}</strong>!</p>"
                 ),
             )
 
