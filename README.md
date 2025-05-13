@@ -1,28 +1,47 @@
 
 # Introduction
 
-## What is Grocery Gauge? 
-This website is a tool for people to track inflation prices on grocery products, more specifically Kroger products
-1. Pulls data from Kroger Products API
-2. Website gets this data from the products and uses ____ to predict the price for the upcoming ___ days
-3. Website simulates the current total price with an Add To Cart function that allows you to see the total price if you were to buy the products today
-4. Website provides notification emails so you can save certain products and get an email when your preferred target price is hit
+# 🛒 GroceryGauge
+
+## 📌 What is GroceryGauge?
+GroceryGauge is a web application that helps users track inflation and price changes for grocery products — specifically Kroger items. It allows users to:
+
+- Track historical price changes with dynamic graphs  
+- Estimate the cost of a grocery list using a simulated cart  
+- Set up price alerts to be notified via email when a product hits a target price  
+
+The site pulls product data from the **Kroger Products API** and uses a forecasting model to predict prices for the next few days.
+
+---
 
 ## Features
-- Browse Kroger grocery items with updated prices
-- View individual graphs for each product showcasing the change in price over time
-- Add/remove products from a simulated grocery cart to calculate the price of a grocery list
-- Search function to find specific products
-- Request an email alert for when desired products reach a desired price
 
+- Browse Kroger grocery items with regularly updated prices  
+- View price history graphs for each product  
+- Add/remove products to a cart to simulate a grocery trip total  
+- Search for specific products by name  
+- Set email alerts for preferred target prices  
+
+---
+
+## Technical Overview
+
+- **Frontend:** React.js (HTML/CSS/JSX)  
+- **Backend:** Django REST Framework for API management and data processing  
+- **Price Prediction:** Separate Flask service that generates price graphs using XGBoost  
+- **Database:** MySQL to store products and price history  
+- **Email Alerts:** Django backend + SMTP integration for notifications  
+
+---
 # Technical Architecture 
 [image]
-
+---
 # Developers 
 - Jennifer Gonzalez (Frontend): Worked on Website Design and connecting backend API calls to Frontend design
 - Isabella Velez (Frontend): Mainly worked on Website Design, also handled the Product and About Us pages.
 - Andrew Stephan (Backend):
 - Yinglin (Backend): Set up the Django project environment and built functionality to fetch Kroger Products API data and stored it in a MySQL database
+---
 # Environment Setup
 - python3 -m venv .venv
 - source .venv/bin/activate
@@ -68,7 +87,7 @@ This website is a tool for people to track inflation prices on grocery products,
 - index.js
 - reportWebVitals.js
 - setupTests.js
-
+---
 ## Website Screenshots
 ![Home Page](https://media.discordapp.net/attachments/1287663401283223555/1371687965562245171/Screenshot_2025-05-12_221002.png?ex=68240b77&is=6822b9f7&hm=4d1870e676750eb29b0f5503e8d99eb864519cd858a1eab06d307a86fb254be9&=&format=webp&quality=lossless&width=1423&height=813)
 ![Product Page](https://media.discordapp.net/attachments/1287663401283223555/1371687965868294292/Screenshot_2025-05-12_221036.png?ex=68240b77&is=6822b9f7&hm=dc1e112301c63cb79a472c05a2d2935e5e3244c4c4d08e507383298f28600dc1&=&format=webp&quality=lossless&width=1420&height=813)
