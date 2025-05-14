@@ -115,11 +115,11 @@ def check_price_alerts():
             try:
                 sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
                 response = sg.send(message)
-                print(f"✅ Email sent to {alert.email} - Status {response.status_code}")
+                print(f" Email sent to {alert.email} - Status {response.status_code}")
 
                 # Optionally deactivate alert after sending
                 alert.is_active = False
                 alert.save()
 
             except Exception as e:
-                print(f"❌ Failed to send email to {alert.email}: {e}")
+                print(f" Failed to send email to {alert.email}: {e}")

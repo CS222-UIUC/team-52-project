@@ -41,7 +41,7 @@ for product_id in range(998, 989, -1):
             VALUES (%s, %s, %s)
         """, (price, date, product_id))
 
-    print(f"✅ Inserted 30 price entries for product_id {product_id}")
+    print(f"Inserted 30 price entries for product_id {product_id}")
 
 conn.commit()
 cursor.close()
