@@ -1,0 +1,12 @@
+django
+requests
+matplotlib
+seaborn
+pandas
+flask
+numpy
+scikit-learn
+xgboost
+celery
+numpy
+mysql
