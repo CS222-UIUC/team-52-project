@@ -28,7 +28,7 @@ The site pulls product data from the **Kroger Products API** and uses a forecast
 
 - **Frontend:** React.js (HTML/CSS/JSX)  
 - **Backend:** Django REST Framework for API management and data processing  
-- **Price Prediction:** Separate Flask service that generates price graphs using XGBoost  
+- **Price Prediction:** Separate Flask service that generates price prediction graphs using XGBoost  
 - **Database:** MySQL to store products and price history  
 - **Email Alerts:** Django backend + SMTP integration for notifications
 
@@ -54,8 +54,8 @@ The site pulls product data from the **Kroger Products API** and uses a forecast
 ---
 # Developers 
 - Jennifer Gonzalez (Frontend): Worked on Website Design and connecting backend API calls to Frontend design
-- Isabella Velez (Frontend): Mainly worked on Website Design, also handled the Product and About Us pages.
-- Andrew Stephan (Backend):
+- Isabella Velez (Frontend): Mainly worked on Website Design, also handled the Product and About Us pages
+- Andrew Stephan (Backend): Worked on price prediction & graph generation components
 - Yinglin (Backend): Set up the Django project environment and built functionality to fetch Kroger Products API data and stored it in a MySQL database
 ---
 # Environment Setup
@@ -80,6 +80,14 @@ The site pulls product data from the **Kroger Products API** and uses a forecast
 - python server.py
 
 ## Project Structure
+- backend/
+  - prediction/
+    - server.py
+  - asgi.py
+  - celery.py
+  - settings.py
+  - urls.py
+  - wsgi.py
 - src/
   - components/
   - CartContext.js
