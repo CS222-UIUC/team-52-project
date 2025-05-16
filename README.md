@@ -50,7 +50,8 @@ The site pulls product data from the **Kroger Products API** and uses a forecast
 
 ---
 # Technical Architecture 
-[image]
+![image](https://github.com/user-attachments/assets/8dc10f99-32c2-4c11-adc4-786113589044)
+
 ---
 # Developers 
 - Jennifer Gonzalez (Frontend): Worked on Website Design and connecting backend API calls to Frontend design
